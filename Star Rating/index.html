@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Rating Widget</title>
+    <style>
+        .star-rating {
+            display: flex;
+            direction: row;
+            font-size: 30px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .star {
+            color: #ccc;
+            /* Default star color */
+            transition: color 0.3s;
+        }
+
+        .star.selected {
+            color: #ffcc00;
+            /* Selected star color */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="star-rating" id="starRating">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+        <button id="show">Show average</button>
+    </div>
+
+    <script>
+        const stars = document.querySelectorAll('.star');
+        let currentRating = 0;
+        let avg=[];
+
+        stars.forEach((star) => {
+            star.addEventListener('mouseover', () => handleHover(star));
+            star.addEventListener('mouseout', resetStars);
+            star.addEventListener('click', () => handleClick(star));
+        });
+
+        function handleHover(star) {
+            const hoverValue = parseInt(star.getAttribute('data-value'));
+            highlightStars(hoverValue);
+        }
+        
+
+        function resetStars() {
+            highlightStars(currentRating);
+        }
+
+        function handleClick(star) {
+            currentRating = parseInt(star.getAttribute('data-value'));
+            avg.push(currentRating);
+            console.log(avg)
+            highlightStars(currentRating);
+            console.log(`Rated: ${currentRating} star(s)`);
+        }
+
+        function averageStars(arr){
+            let sum=0;
+           for (let i=0;i< arr.length;i++){
+            sum+= arr[i]
+           }
+           console.log("The average rating is:",sum/ arr.length)
+        }
+        show.addEventListener('click', () => averageStars(avg))
+
+        function highlightStars(rating) {
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

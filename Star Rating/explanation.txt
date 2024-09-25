@@ -1,0 +1,37 @@
+Implementation
+HTML: Define the stars and their structure.
+CSS: Style the stars for normal, hover, and selected states.
+JavaScript: Add interactivity to handle hover, click, and rating state management.
+
+Explanation
+
+HTML:
+A div with the class star-rating contains five star elements (span) with the class star.
+Each star has a data-value attribute representing its position (1 to 5).
+
+CSS:
+Stars are styled with default gray color (#ccc).
+When hovered, stars change color to yellow (#ffcc00) to indicate selection.
+The selected class is applied to indicate the clicked stars.
+
+JavaScript:
+Hover Behavior: When hovering over a star, all previous stars are highlighted up to the hovered star.
+Click Behavior: Clicking a star sets the current rating and highlights stars up to the clicked star.
+Reset on Mouse Out: Stars return to their current rating state when the mouse is moved away.
+
+How It Works
+Hovering over a star shows the tentative rating up to that star.
+Clicking locks the rating in place, applying the selected class to all stars up to the clicked star.
+The rating is displayed or logged as per your requirements, and you can extend this to submit the rating to a server.
+
+JavaScript Adjustments:
+
+The hover event now highlights only the stars up to the hovered star by directly passing the star element to the handleHover function.
+The highlightStars function checks each star's index against the passed rating value, ensuring only the appropriate stars are highlighted.
+CSS Update:
+
+Removed the CSS sibling selectors that were previously used to highlight stars, shifting the logic entirely to JavaScript to maintain fine control over the behavior.
+How It Works
+When the user hovers over a star, only the stars up to that specific star are highlighted.
+Clicking a star sets the rating and highlights the stars up to the selected rating.
+Moving the mouse away resets the stars to reflect the current rating state.
