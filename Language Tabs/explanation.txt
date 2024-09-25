@@ -1,0 +1,24 @@
+Implementation Steps:
+
+HTML Structure:
+Create tabs for each language.
+Create a content area that changes based on the selected tab.
+
+CSS:
+Style the tabs and the active tab.
+Style the content area.
+
+JavaScript:
+Fetch data from the API.
+Display content based on the selected tab.
+Highlight the active tab
+
+Key Features of the Code:
+
+Dynamic Tabs: The tabs are created based on the data received from the API.
+Active Tab Highlighting: The clicked tab is highlighted with a different background color, and the corresponding content is displayed.
+Content Update: Clicking on a tab updates the content area to show the relevant text.
+
+How to Use:
+Replace the apiData array with the actual data fetched from the API endpoint.
+The code assumes that the endpoint provides data in a structured format. If the format is different, adjust the data handling logic accordingly.
