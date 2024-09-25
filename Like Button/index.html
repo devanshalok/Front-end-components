@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Like Button</title>
+    <style>
+        .like-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border: 2px solid gray;
+            border-radius: 25px;
+            cursor: pointer;
+            background-color: white;
+            color: gray;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            position: relative;
+            outline: none;
+        }
+
+        .like-button img {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            transition: all 0.3s;
+        }
+
+        .like-button:hover {
+            border-color: red;
+            color: red;
+        }
+
+        .like-button:hover img {
+            filter: invert(32%) sepia(90%) saturate(2883%) hue-rotate(334deg) brightness(101%) contrast(101%);
+        }
+
+        .like-button.clicked {
+            background-color: red;
+            border-color: red;
+            color: white;
+        }
+
+        .like-button.clicked img {
+            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+        }
+
+        .like-button.loading {
+            pointer-events: none;
+            background-color: red;
+            color: white;
+            border-color: red;
+        }
+
+        .like-button.loading img {
+            display: none;
+        }
+
+        .like-button.loading::after {
+            content: '';
+            border: 2px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button id="likeButton" class="like-button">
+        <img src="https://img.icons8.com/ios-filled/50/808080/like--v1.png" alt="heart-icon" id="heartIcon">
+        Like
+    </button>
+
+    <script>
+        const likeButton = document.getElementById('likeButton');
+
+        likeButton.addEventListener('click', () => {
+            // Simulate loading state
+            likeButton.classList.add('loading');
+
+            // Simulate backend request with a setTimeout (replace with actual fetch request)
+            setTimeout(() => {
+                // Simulate backend response
+                likeButton.classList.remove('loading');
+                likeButton.classList.add('clicked');
+            }, 2000); // Simulating 2-second processing time
+
+            // Example fetch to backend (uncomment when actual API endpoint is available)
+            // fetch('BACKEND_ENDPOINT', {
+            //     method: 'POST',
+            //     body: JSON.stringify({ liked: true })
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+            //     likeButton.classList.remove('loading');
+            //     likeButton.classList.add('clicked');
+            // })
+            // .catch(error => {
+            //     console.error('Error:', error);
+            //     likeButton.classList.remove('loading');
+            // });
+        });
+    </script>
+
+</body>
+
+</html>

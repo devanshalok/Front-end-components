@@ -1,0 +1,20 @@
+Implementation:
+HTML: The button includes a heart icon and the text "Like."
+CSS: Defines styles for the button's normal, hovered, clicked, and loading states.
+JavaScript: Handles the click event, simulates a backend request, and manages state transitions.
+
+Explanation:
+HTML:
+The button includes an image element for the heart icon and the text "Like."
+
+CSS:
+Normal State: The button has gray text, a heart icon, and a gray border.
+Hover State: The text, heart icon, and border turn red.
+Clicked State: The background becomes red, and the text and heart icon turn white.
+Loading State: The heart icon is hidden, and a spinning loader appears, indicating a processing state.
+
+JavaScript:
+The button listens for click events.
+When clicked, it enters a loading state and simulates a backend call with a setTimeout.
+Once the "backend" responds (after 2 seconds in this simulation), the button changes to the clicked state.
+The commented-out fetch code shows how you would integrate a real backend call, handling loading and error states appropriately.
