@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paginated Address List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .address-list {
+            max-width: 600px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .address-list th,
+        .address-list td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .address-list th {
+            background-color: #f4f4f4;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .pagination button:hover {
+            background-color: #ddd;
+        }
+
+        .pagination button:disabled {
+            background-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Shipping Addresses</h2>
+    <table class="address-list">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody id="addressTableBody">
+            <!-- Address rows will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <button id="prevButton" disabled>Previous</button>
+        <button id="nextButton">Next</button>
+    </div>
+
+    <script>
+        // Sample data array of addresses
+        const addresses = [
+            '123 Main St, New York, NY 10001',
+            '456 Elm St, Los Angeles, CA 90001',
+            '789 Maple Ave, Chicago, IL 60601',
+            '101 Pine St, Houston, TX 77001',
+            '202 Oak St, Phoenix, AZ 85001',
+            '303 Cedar St, Philadelphia, PA 19101',
+            '404 Birch St, San Antonio, TX 78201',
+            '505 Spruce St, San Diego, CA 92101',
+            '606 Willow St, Dallas, TX 75201',
+            '707 Ash St, San Jose, CA 95101',
+            '808 Walnut St, Austin, TX 73301',
+            '909 Chestnut St, Jacksonville, FL 32099',
+            '1010 Redwood St, San Francisco, CA 94101',
+            '1111 Palm St, Columbus, OH 43201',
+            '1212 Cypress St, Charlotte, NC 28201'
+        ];
+
+        const addressesPerPage = 5;
+        let currentPage = 1;
+
+        // Function to render the address list for the current page
+        function renderAddresses() {
+            const tableBody = document.getElementById('addressTableBody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            const start = (currentPage - 1) * addressesPerPage;
+            const end = start + addressesPerPage;
+            const currentAddresses = addresses.slice(start, end);
+
+            currentAddresses.forEach((address, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${start + index + 1}</td>
+                <td>${address}</td>
+            `;
+                tableBody.appendChild(row);
+            });
+
+            // Update button states
+            document.getElementById('prevButton').disabled = currentPage === 1;
+            document.getElementById('nextButton').disabled = currentPage === Math.ceil(addresses.length / addressesPerPage);
+        }
+
+        // Event listeners for pagination buttons
+        document.getElementById('prevButton').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderAddresses();
+            }
+        });
+
+        document.getElementById('nextButton').addEventListener('click', () => {
+            if (currentPage < Math.ceil(addresses.length / addressesPerPage)) {
+                currentPage++;
+                renderAddresses();
+            }
+        });
+
+        // Initial render
+        renderAddresses();
+    </script>
+
+</body>
+
+</html>

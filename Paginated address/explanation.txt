@@ -1,0 +1,25 @@
+Implementation Steps
+HTML: Create the basic structure of the paginated address list and navigation buttons.
+CSS: Style the table and pagination controls.
+JavaScript: Handle rendering the addresses, managing pagination, and navigating between pages.
+
+Explanation
+
+HTML:
+The table structure includes a header (<thead>) with columns for the index and address.
+A <tbody> is used to dynamically insert rows of addresses based on the current page.
+Two buttons (Previous and Next) are used to navigate through the paginated data.
+
+CSS:
+The table and buttons are styled to look clean and responsive.
+Disabled buttons are styled to indicate they are not clickable.
+
+JavaScript:
+renderAddresses Function: Determines which addresses to show based on the current page and inserts the rows into the table.
+Pagination Logic: The Previous and Next buttons adjust the currentPage and trigger a re-render of the table.
+The buttons are disabled when on the first or last page to prevent invalid navigation.
+
+How It Works
+Initially, the first five addresses are shown.
+Clicking Next shows the next five addresses, and clicking Previous shows the previous five.
+The renderAddresses function is called whenever the page changes, updating the visible data accordingly.
