@@ -1,0 +1,20 @@
+Implementation
+HTML: Create the structure for the carousel with images and navigation buttons.
+CSS: Style the carousel, images, and navigation buttons.
+JavaScript: Add functionality to navigate between images.
+
+Explanation:
+
+HTML:
+The carousel is structured with a .carousel container holding the .carousel-images element, which contains individual .carousel-image elements for each slide.
+Two buttons (prevButton and nextButton) are used for navigation.
+
+CSS:
+The .carousel has relative positioning with overflow hidden to show only one image at a time.
+The .carousel-images uses flex display to align images side by side and transitions to slide between images smoothly.
+Navigation buttons are styled and positioned at the sides of the carousel.
+
+JavaScript:
+The showSlide function updates the transform property of .carousel-images to show the current slide based on currentIndex.
+Event listeners are attached to the buttons to navigate to the next or previous slide.
+An optional setInterval auto-slides through the images every 5 seconds.
