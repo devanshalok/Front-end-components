@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Bar Implementation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .item-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .item-list li {
+            padding: 8px 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .item-list li:hover {
+            background-color: #f1f1f1;
+        }
+
+        .no-results {
+            color: #888;
+            font-style: italic;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search items..." />
+    </div>
+
+    <ul class="item-list" id="itemList">
+        <li>Apple</li>
+        <li>Banana</li>
+        <li>Baniyan</li>
+        <li>Orange</li>
+        <li>Grapes</li>
+        <li>Pineapple</li>
+        <li>Mango</li>
+        <li>Strawberry</li>
+        <li>Blueberry</li>
+        <li>Watermelon</li>
+        <li>Cherry</li>
+    </ul>
+
+    <script>
+        const searchInput = document.getElementById("searchInput");
+        const itemList = document.getElementById("itemList");
+        const items = itemList.getElementsByTagName("li");
+
+        // Function to filter the list based on the search input
+        searchInput.addEventListener("input", function () {
+            const filter = searchInput.value.toLowerCase();
+            let found = false;
+
+            Array.from(items).forEach((item) => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    item.style.display = "";
+                    found = true;
+                } else {
+                    item.style.display = "none";
+                }
+            });
+
+            // If no items match, display a "no results" message
+            if (!found) {
+                if (!document.querySelector(".no-results")) {
+                    const noResultsMessage = document.createElement("div");
+                    noResultsMessage.textContent = "No results found";
+                    noResultsMessage.classList.add("no-results");
+                    itemList.parentNode.appendChild(noResultsMessage);
+                }
+            } else {
+                const noResultsMessage = document.querySelector(".no-results");
+                if (noResultsMessage) {
+                    noResultsMessage.remove();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
