@@ -1,0 +1,25 @@
+Implementation Steps
+HTML: Create the basic structure of the table and input for search.
+CSS: Style the table, headers, and search input.
+JavaScript: Handle populating the table, sorting the data, and filtering based on user input.
+
+Explanation
+
+HTML:
+The table structure includes headers (<th>) for each column: Name, Age, and City.
+Each header has data-column and data-order attributes to track the column being sorted and the sort order.
+
+CSS:
+The table and search input are styled for a clean look.
+Arrow indicators (▲ for ascending and ▼ for descending) are added to the headers when they are clicked for sorting.
+
+JavaScript:
+The renderTableRows function populates the table rows based on the data.
+The sortTable function sorts the data array based on the clicked column and the specified order (ascending or descending).
+The filterTable function filters the data based on the search term entered in the input field.
+Event listeners are added to the headers to handle sorting and to the search input for filtering.
+
+Features
+Sorting: Click on the column headers to sort the table data in ascending or descending order.
+Searching: Enter text in the search input to filter the rows based on the entered term.
+Dynamic: The table updates in real-time as you type in the search input or click the headers.
