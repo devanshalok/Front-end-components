@@ -1,0 +1,22 @@
+Implementation Steps
+HTML: Create the structure for the input field, button, and the list of tasks.
+CSS: Style the to-do list for a clean and user-friendly interface.
+JavaScript: Implement the functionality to add, mark, and remove tasks.
+
+Explanation
+
+HTML Structure:
+The main container includes an input field, an "Add" button, and an unordered list (<ul>) where tasks will be displayed.
+
+CSS Styling:
+The styles create a simple and clean interface for the to-do list, with hover effects and basic transitions for interactions.
+
+JavaScript Functionality:
+Adding Tasks: When the user enters a task and clicks "Add" or presses Enter, the task is added to the list.
+Marking as Completed: Clicking on a task toggles its completion state, visually represented by striking through the text and changing the background color.
+Deleting Tasks: Each task has a delete button (×) that removes the task from the list when clicked.
+
+Usage
+Type a task into the input field and click "Add" or press Enter to add it to the list.
+Click on a task to mark it as completed or uncompleted.
+Click the delete button (×) on a task to remove it from the list.
