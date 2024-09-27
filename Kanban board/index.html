@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible=" IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .board {
+            display: flex;
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .column {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .column-header {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            padding: 5px 0;
+        }
+
+        .task {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            cursor: grab;
+            transition: background-color 0.3s;
+            border: 1px solid #ccc;
+        }
+
+        .task.dragging {
+            opacity: 0.5;
+        }
+
+        .drop-zone {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 50px;
+        }
+
+        .task-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .task-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .add-task-button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .add-task-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Kanban Board</h1>
+
+    <div class="task-input-container">
+        <input type="text" id="task-input" class="task-input" placeholder="Enter a new task...">
+        <button id="add-task-button" class="add-task-button">Add Task</button>
+    </div>
+
+    <div class="board">
+        <div class="column" id="todo-column">
+            <div class="column-header">To Do</div>
+            <div class="drop-zone" id="todo-dropzone"></div>
+        </div>
+        <div class="column" id="inprogress-column">
+            <div class="column-header">In Progress</div>
+            <div class="drop-zone" id="inprogress-dropzone"></div>
+        </div>
+        <div class="column" id="done-column">
+            <div class="column-header">Done</div>
+            <div class="drop-zone" id="done-dropzone"></div>
+        </div>
+    </div>
+
+    <script>
+        const addTaskButton = document.getElementById('add-task-button');
+        const taskInput = document.getElementById('task-input');
+        const todoDropZone = document.getElementById('todo-dropzone');
+        const dropZones = document.querySelectorAll('.drop-zone');
+
+        // Function to add a new task
+        addTaskButton.addEventListener('click', () => {
+            const taskText = taskInput.value.trim();
+            if (taskText) {
+                createTaskElement(taskText, todoDropZone);
+                taskInput.value = ''; // Clear the input field
+            } else {
+                alert('Please enter a task.');
+            }
+        });
+
+        // Function to create a task element and make it draggable
+        function createTaskElement(taskText, dropZone) {
+            const task = document.createElement('div');
+            task.className = 'task';
+            task.textContent = taskText;
+            task.setAttribute('draggable', 'true');
+
+            task.addEventListener('dragstart', handleDragStart);
+            task.addEventListener('dragend', handleDragEnd);
+
+            dropZone.appendChild(task);
+        }
+
+        // Handle drag and drop events
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', handleDragOver);
+            zone.addEventListener('drop', handleDrop);
+        });
+
+        function handleDragStart(event) {
+            event.dataTransfer.setData('text/plain', event.target.id);
+            event.target.classList.add('dragging');
+        }
+
+        function handleDragEnd(event) {
+            event.target.classList.remove('dragging');
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const draggingTask = document.querySelector('.dragging');
+            event.target.appendChild(draggingTask);
+        }
+    </script>
+
+</body>
+
+</html>

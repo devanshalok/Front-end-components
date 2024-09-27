@@ -1,0 +1,22 @@
+Implementation Steps
+HTML: Add an input field and a button for task creation.
+CSS: Style the input field and button for a better user interface.
+JavaScript: Implement the functionality to add new tasks to the "To Do" column and ensure that new tasks are draggable and can be moved between columns.
+
+Explanation
+
+HTML Structure:
+A new input field and button are added above the board to allow the user to enter new tasks.
+The Kanban board remains the same with three columns: "To Do," "In Progress," and "Done."
+
+CSS Styling:
+Added styles for the task input and the add button to make them look integrated with the board design.
+
+JavaScript Functionality:
+Adding Tasks: The addTaskButton event listener calls createTaskElement when clicked, adding a new task to the "To Do" column.
+Creating Task Elements: The createTaskElement function creates a new task, makes it draggable, and appends it to the designated drop zone.
+Drag-and-Drop: The existing drag-and-drop logic handles moving tasks between columns.
+
+Usage
+Enter a task in the input field and click the "Add Task" button to create a new task in the "To Do" column.
+Drag and drop tasks between the columns to update their status.
