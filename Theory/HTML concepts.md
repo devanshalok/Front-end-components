@@ -1,5 +1,3 @@
-Here are the answers to all the HTML questions from the document:
-
 1. **What is `<!DOCTYPE html>` in HTML5?**
 
    - `<!DOCTYPE html>` is a declaration that defines the document type and version of HTML being used. It helps the browser to render the page correctly by switching to the standard mode instead of quirks mode, ensuring compatibility with modern web standards.
