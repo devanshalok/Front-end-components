@@ -1,0 +1,20 @@
+Implementation Steps:
+HTML: Set up the basic structure to display the directory tree.
+CSS: Style the directory tree for better visualization.
+JavaScript: Use a recursive function to traverse the nested JSON object and render it as a tree structure.
+
+Explanation of the Code
+HTML Structure:
+A <ul> element with the ID tree acts as the root of the directory tree.
+
+CSS Styling:
+.directory-tree styles the list to appear as a directory structure with nested lists.
+.file class is used to indicate items that are files.
+Icons (📁 for directories and 📄 for files) are added using :before pseudo-elements.
+.nested class is used to hide nested lists by default, and .active class displays them when toggled.
+
+JavaScript Functionality:
+The renderTree function recursively traverses the JSON object, creating <li> elements for each key.
+If the key represents an object (directory), it creates a nested <ul> and recursively calls renderTree on it.
+For files (null values), it adds the .file class to differentiate them.
+Clicking on a directory toggles the visibility of its contents (.nested list).

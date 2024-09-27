@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directory Tree</title>
+    <style>
+        .directory-tree {
+            list-style: none;
+            padding-left: 50px;
+        }
+
+        .directory-tree li {
+            cursor: pointer;
+            margin: 5px 0;
+        }
+
+        .directory-tree li:before {
+            content: '📁 ';
+            margin-right: 5px;
+        }
+
+        .directory-tree .file:before {
+            content: '📄 ';
+        }
+
+        .directory-tree .nested {
+            display: none;
+        }
+
+        .directory-tree .active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Directory Tree</h2>
+    <ul id="tree" class="directory-tree"></ul>
+
+    <script>
+        // Sample nested JSON object representing a directory structure
+        const directory = {
+            "src": {
+                "components": {
+                    "Header.js": null,
+                    "Footer.js": null,
+                },
+                "styles": {
+                    "main.css": null,
+                    "reset.css": null
+                },
+                "index.js": null,
+                "App.js": null
+            },
+            "public": {
+                "index.html": null,
+                "favicon.ico": null
+            },
+            "package.json": null,
+            "README.md": null
+        };
+
+        // Recursive function to render the directory tree
+        function renderTree(obj, parent) {
+            for (let key in obj) {
+                const li = document.createElement('li');
+                li.textContent = key;
+
+                if (obj[key] && typeof obj[key] === 'object') {
+                    const ul = document.createElement('ul');
+                    ul.classList.add('nested');
+                    renderTree(obj[key], ul);
+                    li.appendChild(ul);
+
+                    // Toggle display on click
+                    li.addEventListener('click', function (e) {
+                        e.stopPropagation(); // Prevent event from bubbling up
+                        ul.classList.toggle('active');
+                    });
+                } else {
+                    li.classList.add('file');
+                }
+
+                parent.appendChild(li);
+            }
+        }
+
+        // Initialize the tree rendering
+        const treeContainer = document.getElementById('tree');
+        renderTree(directory, treeContainer);
+    </script>
+
+</body>
+
+</html>
