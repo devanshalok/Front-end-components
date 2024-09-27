@@ -64,5 +64,3 @@ Here are the answers to all the HTML questions from the document:
 
 11. **What is the difference between HTML and HTML5?**
     - This question is the same as Question 4, so the answer is already provided above.
-
-Let me know if you need further clarification or have more questions!
