@@ -1,4 +1,13 @@
+/*
 
+API URL: The apiUrl variable holds the URL of the API endpoint (https://jsonplaceholder.typicode.com/posts), which returns a list of posts.
+fetchData Function: This asynchronous function uses the fetch() method to request data from the API.
+await fetch(apiUrl): Sends a GET request to the API.
+Checks if the response is okay with response.ok. If not, it throws an error.
+Parses the response data to JSON format with await response.json().
+Logging the Data: If successful, it logs the fetched data; otherwise, it catches and logs any errors.
+
+*/
 
 // Define the URL of the API endpoint
 const apiUrl = 'https://jsonplaceholder.typicode.com/posts';
@@ -28,13 +37,4 @@ async function fetchData() {
 // Call the fetchData function to initiate the fetch request
 fetchData();
 
-/*
 
-API URL: The apiUrl variable holds the URL of the API endpoint (https://jsonplaceholder.typicode.com/posts), which returns a list of posts.
-fetchData Function: This asynchronous function uses the fetch() method to request data from the API.
-await fetch(apiUrl): Sends a GET request to the API.
-Checks if the response is okay with response.ok. If not, it throws an error.
-Parses the response data to JSON format with await response.json().
-Logging the Data: If successful, it logs the fetched data; otherwise, it catches and logs any errors.
-
-*/
