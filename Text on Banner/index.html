@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banner with Text Overlay</title>
+    <style>
+        .banner-container {
+            position: relative;
+            /* Set the container as the positioning context */
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .banner-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .banner-text {
+            position: absolute;
+            /* Position the text over the image */
+            top: 50%;
+            /* Center vertically */
+            left: 50%;
+            /* Center horizontally */
+            transform: translate(-50%, -50%);
+            /* Adjust position to exact center */
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            /* Add shadow for readability */
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="banner-container">
+        <img src="https://via.placeholder.com/1200x400" alt="Banner Image" class="banner-image">
+        <div class="banner-text">Welcome to Our Website</div>
+    </div>
+
+</body>
+
+</html>

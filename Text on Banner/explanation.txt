@@ -1,0 +1,24 @@
+Rendering text on a banner image can be achieved using HTML and CSS. The common approach is to position the text over
+the image using CSS properties like position: relative and position: absolute. This allows the text to be placed
+precisely on top of the image without affecting the flow of the document.
+
+Explanation of the Code
+
+HTML Structure:
+A <div> with the class banner-container acts as the parent container that holds the image and the text.
+The <img> tag with the class banner-image is used to display the banner image.
+The <div> with the class banner-text contains the text that will be displayed on top of the image.
+
+CSS Styling:
+The .banner-container is set to position: relative, making it the positioning context for the absolutely
+positioned text.
+The .banner-image fills the width of its container and maintains its aspect ratio with width: 100%; height:
+auto;.
+The .banner-text uses position: absolute to overlay the text on top of the image.
+top: 50%; left: 50% places the text roughly in the center of the container.
+transform: translate(-50%, -50%) fine-tunes the position to be exactly centered.
+The text styling includes white color, bold font, and a shadow to improve readability against the image.
+
+Text Readability:
+The text-shadow property is used to add a subtle shadow behind the text, enhancing contrast and ensuring the
+text remains legible against various backgrounds.
