@@ -1,0 +1,25 @@
+Implementation Overview
+HTML: Add an input field and a button for uploading new photos.
+CSS: Style the input and button for adding new images.
+JavaScript: Handle the file upload, create a new gallery item, and enable lightbox functionality for the newly added image.
+
+
+Explanation:
+
+HTML Structure:
+An input field and a button have been added to upload new images to the gallery.
+The gallery is displayed using a grid layout. Each new image added will have lightbox functionality, similar to the initial images.
+
+CSS Styling:
+Styled the input and button to align well with the gallery layout.
+Lightbox and gallery styles remain consistent with the initial design.
+
+JavaScript Functionality:
+When the "Add Photo" button is clicked, it checks if a file is selected and reads the image using FileReader.
+The image is then added to the gallery with the lightbox feature enabled.
+A counter is used to assign unique IDs to each new lightbox section, ensuring that each lightbox is individually targetable.
+
+Usage
+Click on the "Choose File" button to select an image from your computer.
+Click "Add Photo" to add the selected image to the gallery.
+Click on the image in the gallery to view it in a larger size with the lightbox feature.
