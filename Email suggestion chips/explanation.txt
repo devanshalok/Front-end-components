@@ -1,0 +1,25 @@
+Implementation Steps
+HTML: Set up the input field and the container for chips.
+CSS: Style the input, chips, and auto-suggest dropdown.
+JavaScript: Implement the logic to suggest contacts, create chips, and handle chip deletions.
+
+Explanation
+HTML Structure:
+A main input field inside a container is used to type emails. The suggestion-box element shows the auto-suggested
+contacts.
+
+CSS:
+Styles the input, chips, and suggestion box to make them look appealing and user-friendly.
+
+JavaScript:
+Auto-Suggest: The input event on the main input field listens for changes, filters contacts, and displays matching
+suggestions.
+
+Creating Chips: When a suggestion is clicked, it adds the contact to the selectedContacts array and creates a chip
+showing the contacts name and avatar.
+Removing Chips: The chips have a close button (×) that removes the chip when clicked, updating the selected contacts.
+
+Usage
+Start typing in the input field to see suggestions based on the contact list.
+Click on a suggestion to create a chip.
+Click the close (×) icon on a chip to remove it.

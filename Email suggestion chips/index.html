@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible=" IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Auto-Suggest with Chips</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .chip-container {
+            display: flex;
+            flex-wrap: wrap;
+            border: 1px solid #ccc;
+            padding: 5px;
+            margin-top: 10px;
+            border-radius: 4px;
+            gap: 5px;
+        }
+
+        .chip {
+            display: flex;
+            align-items: center;
+            background-color: #e0e0e0;
+            border-radius: 25px;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+
+        .chip img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+
+        .chip .close {
+            margin-left: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .suggestion-box {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            width: 300px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .suggestion-box div {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .suggestion-box div:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Email Auto-Suggest with Chips</h2>
+    <div class="chip-container">
+        <input type="text" id="email-input" placeholder="Type to add contacts"
+            style="border: none; outline: none; flex: 1" />
+    </div>
+    <div id="suggestion-box" class="suggestion-box"></div>
+
+    <script>
+        // Sample contacts data
+        const contacts = [
+            {
+                name: "Alice Johnson",
+                email: "alice@example.com",
+                avatar: "https://i.pravatar.cc/150?img=1",
+            },
+            {
+                name: "Ali khan",
+                email: "ali@example.com",
+                avatar: "https://i.pravatar.cc/150?img=6",
+            },
+            {
+                name: "Bob Smith",
+                email: "bob@example.com",
+                avatar: "https://i.pravatar.cc/150?img=2",
+            },
+            {
+                name: "Charlie Brown",
+                email: "charlie@example.com",
+                avatar: "https://i.pravatar.cc/150?img=3",
+            },
+            {
+                name: "David Wilson",
+                email: "david@example.com",
+                avatar: "https://i.pravatar.cc/150?img=4",
+            },
+            {
+                name: "Eve Adams",
+                email: "eve@example.com",
+                avatar: "https://i.pravatar.cc/150?img=5",
+            },
+        ];
+
+        const input = document.getElementById("email-input");
+        const suggestionBox = document.getElementById("suggestion-box");
+        const chipContainer = document.querySelector(".chip-container");
+        let selectedContacts = [];
+
+        // Filter and display suggestions
+        input.addEventListener("input", function () {
+            const query = input.value.toLowerCase();
+            suggestionBox.innerHTML = "";
+            suggestionBox.style.display = "none";
+
+            if (query) {
+                const filteredContacts = contacts.filter(
+                    (contact) =>
+                        contact.name.toLowerCase().includes(query) ||
+                        contact.email.toLowerCase().includes(query)
+                );
+
+                filteredContacts.forEach((contact) => {
+                    const suggestionItem = document.createElement("div");
+                    suggestionItem.textContent = `${contact.name} (${contact.email})`;
+                    suggestionItem.addEventListener("click", () =>
+                        selectContact(contact)
+                    );
+                    suggestionBox.appendChild(suggestionItem);
+                });
+
+                if (filteredContacts.length > 0) {
+                    suggestionBox.style.display = "block";
+                }
+            }
+        });
+
+        // Select contact and create a chip
+        function selectContact(contact) {
+            if (!selectedContacts.find((c) => c.email === contact.email)) {
+                selectedContacts.push(contact);
+                createChip(contact);
+                input.value = "";
+                suggestionBox.style.display = "none";
+            }
+        }
+
+        // Create a chip for the selected contact
+        function createChip(contact) {
+            const chip = document.createElement("div");
+            chip.className = "chip";
+            chip.innerHTML = `
+            ${contact.name}
+            <img src="${contact.avatar}" alt="${contact.name}">
+            <span class="close">&times;</span>
+        `;
+            chip
+                .querySelector(".close")
+                .addEventListener("click", () => removeChip(contact, chip));
+            chipContainer.insertBefore(chip, input);
+        }
+
+        // Remove a chip
+        function removeChip(contact, chip) {
+            selectedContacts = selectedContacts.filter(
+                (c) => c.email !== contact.email
+            );
+            chipContainer.removeChild(chip);
+        }
+
+        // Hide suggestion box on click outside
+        document.addEventListener("click", function (event) {
+            if (
+                !chipContainer.contains(event.target) &&
+                !suggestionBox.contains(event.target)
+            ) {
+                suggestionBox.style.display = "none";
+            }
+        });
+    </script>
+</body>
+
+</html>
