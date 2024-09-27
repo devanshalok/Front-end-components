@@ -1,4 +1,4 @@
-// Sample code to fetch data from an API and log it to the console
+
 
 // Define the URL of the API endpoint
 const apiUrl = 'https://jsonplaceholder.typicode.com/posts';
