@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive Layout with Flexbox</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            background: #555;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background: #777;
+        }
+
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: space-between;
+        }
+
+        .content {
+            flex: 1 1 calc(66% - 20px);
+            min-width: 200px;
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        aside {
+            flex: 1 1 calc(33% - 20px);
+            min-width: 150px;
+            background: #e0e0e0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+
+            .content,
+            aside {
+                flex: 1 1 100%;
+            }
+            nav {
+                flex-direction: column; /* Stack the links vertically */
+                gap: 5px; /* Adjust the gap between stacked links */
+                align-items: center;
+            }
+            nav a {
+                text-align: center; /* Center the text inside each link */
+                width: 50%; /* Make the links take full width */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Adaptive Layout</h1>
+        <nav aria-label="Main navigation">
+            <a href="#" role="button">Home</a>
+            <a href="#" role="button">About</a>
+            <a href="#" role="button">Services</a>
+            <a href="#" role="button">Contact</a>
+
+        </nav>
+    </header>
+
+    <main role="main">
+        <article class="content" aria-labelledby="main-content-title">
+            <h2 id="main-content-title">Main Content Area</h2>
+            <p>This is the main content area. It expands to take up more space compared to the sidebar, adapting to
+                different screen sizes using Flexbox.</p>
+            <p>Content can include text, images, videos, and more, all styled to be responsive and accessible.</p>
+        </article>
+
+        <aside aria-labelledby="sidebar-title">
+            <h2 id="sidebar-title">Sidebar</h2>
+            <p>This sidebar adjusts its size and position based on the screen size. On smaller screens, it stacks below
+                the main content.</p>
+        </aside>
+    </main>
+
+    <footer role="contentinfo">
+        <p>&copy; 2024 Adaptive Layout Example. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>
