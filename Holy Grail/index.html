@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holy Grail Layout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header,
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .nav,
+        .ads {
+            background-color: #f4f4f4;
+            padding: 10px;
+            min-width: 150px;
+        }
+
+        .nav {
+            flex: 0 0 20%;
+        }
+
+        .content {
+            flex: 1;
+            background-color: #fff;
+            padding: 10px;
+        }
+
+        .ads {
+            flex: 0 0 20%;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .nav,
+            .ads {
+                min-width: auto;
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Holy Grail Layout</h1>
+    </header>
+
+    <div class="container">
+        <aside class="nav">
+            <h2>Navigation</h2>
+            <ul>
+                <li>Home</li>
+                <li>About</li>
+                <li>Services</li>
+                <li>Contact</li>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <h2>Main Content</h2>
+            <p>This is where the main content of the page goes. The Holy Grail layout is known for its three-column
+                layout with a header and footer, traditionally difficult to achieve with older CSS techniques.</p>
+        </main>
+
+        <aside class="ads">
+            <h2>Advertisements</h2>
+            <p>This section can be used for advertisements or other complementary information.</p>
+        </aside>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Your Company. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+The Holy Grail layout is a classic web page structure consisting of a header, footer, and three main columns:
+ a left sidebar (usually for navigation), 
+ a center content area,
+and a right sidebar (often for ads). The layout is responsive and should work well on various screen sizes.
+
+Explanation
+HTML Structure:
+The layout is divided into a header, footer, and three main sections: navigation (nav), content (main), and ads (aside).
+The container class wraps the main sections, making it easy to apply the flexbox properties to arrange the three columns.
+
+CSS Flexbox Layout:
+The container is set up with display: flex; to create a row layout that aligns the three columns side-by-side.
+The flex property is used to define how the space is divided among the three sections:
+The content section takes the most space with flex: 1.
+The nav and ads sections are given fixed sizes but can shrink or expand based on the viewport.
+A media query ensures the layout becomes vertical on smaller screens (e.g., mobile devices), making it fully responsive.
+
+Responsive Design:
+The layout adjusts gracefully when the screen size is below 768px, stacking the navigation, content, and ads sections vertically for better readability on smaller devices.
+
+Styling:
+The header and footer have a consistent background color and padding.
+The columns have padding for readability and distinct backgrounds to visually separate content areas.
