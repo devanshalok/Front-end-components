@@ -1,0 +1,15 @@
+Explanation
+
+HTML Structure:
+The HTML structure consists of a main div for the clock face and three divs representing the hour, minute, and second hands.
+
+CSS Styling:
+The clock is styled as a circular face with a border to give it a classic analog look.
+Each hand (hour, minute, second) is positioned absolutely at the center of the clock, using CSS transformations to rotate based on the current time.
+
+JavaScript Functionality:
+The updateClock function calculates the rotation angle for each hand based on the current time:
+Seconds: Each second corresponds to a 6-degree rotation (360 degrees divided by 60 seconds).
+Minutes: Each minute corresponds to a 6-degree rotation, with a slight movement based on seconds.
+Hours: Each hour corresponds to a 30-degree rotation (360 degrees divided by 12 hours), with additional movement based on minutes.
+The clock hands are updated every second using setInterval, creating a smooth ticking effect.
