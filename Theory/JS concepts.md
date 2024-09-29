@@ -127,26 +127,18 @@
     - **`localStorage`** stores data with no expiration time.
     - **Cookies** store data that can be sent to the server with each HTTP request, usually with expiration dates.
 
-26. **Write a program to sort an array.**
-
-    ```javascript
-    const arr = [3, 1, 4, 1, 5];
-    arr.sort((a, b) => a - b); // Ascending order
-    console.log(arr); // [1, 1, 3, 4, 5]
-    ```
-
-27. **What is the use of `JSON.stringify` and `JSON.parse()` methods in JavaScript?**
+26. **What is the use of `JSON.stringify` and `JSON.parse()` methods in JavaScript?**
 
     - `JSON.stringify` converts a JavaScript object into a JSON string.
     - `JSON.parse` converts a JSON string back into a JavaScript object.
 
-28. **What are `map`, `filter`, and `reduce` in JavaScript?**
+27. **What are `map`, `filter`, and `reduce` in JavaScript?**
 
     - **`map`** creates a new array by applying a function to each element of an array.
     - **`filter`** creates a new array with elements that pass a specified test.
     - **`reduce`** applies a function to each element of an array to reduce it to a single value.
 
-29. **What is a generator function in JavaScript?**
+28. **What is a generator function in JavaScript?**
     - A generator function is defined using `function*` and can pause its execution with `yield`. It returns an iterator, which can be resumed
 
 to execute code blocks.
@@ -178,104 +170,3 @@ to execute code blocks.
 36. **What is memoization in JavaScript?**
 
     - Memoization is an optimization technique used to speed up function execution by caching the results of expensive function calls and returning the cached result when the same inputs occur again.
-
-37. **Write a program to find element occurrence in an array.**
-
-    ```javascript
-    const arr = [1, 1, 2, 3, 1, 4];
-    const count = {};
-    arr.forEach((element) => {
-      count[element] = (count[element] || 0) + 1;
-    });
-    console.log(count); // { '1': 3, '2': 1, '3': 1, '4': 1 }
-    ```
-
-38. **Write a program to remove duplicate items from an array.**
-
-    ```javascript
-    const arr = [1, 2, 3, 4, 1, 2];
-    const uniqueArr = [...new Set(arr)];
-    console.log(uniqueArr); // [1, 2, 3, 4]
-    ```
-
-39. **What will be the output of the given code snippet?**
-
-    ```javascript
-    const firstname = fun();
-    let name = "vivek";
-    function fun() {
-      return `my name is ${name} malviya`;
-    }
-    console.log(firstname); // Output: "my name is undefined malviya" because `name` is hoisted but not initialized before calling fun()
-    ```
-
-40. **Write a program to multiply two numbers without using the multiply sign in JavaScript.**
-
-    ```javascript
-    function multiply(a, b) {
-      let result = 0;
-      for (let i = 0; i < b; i++) {
-        result += a;
-      }
-      return result;
-    }
-    console.log(multiply(5, 3)); // Output: 15
-    ```
-
-41. **Write a program for sorting in JavaScript.**
-
-    ```javascript
-    const arr = [3, 2, 5, 4, 1, 0];
-    arr.sort((a, b) => a - b); // Ascending order
-    console.log(arr); // [0, 1, 2, 3, 4, 5]
-    ```
-
-42. **What will be the output of the provided code examples?**
-
-    - This question would need specific examples to provide answers.
-
-43. **Write a program to create a polyfill for the `map` method in JavaScript.**
-
-    ```javascript
-    Array.prototype.myMap = function (callback) {
-      let temp = [];
-      for (let i = 0; i < this.length; i++) {
-        temp.push(callback(this[i], i, this));
-      }
-      return temp;
-    };
-    const arr = [2, 3, 4, 5];
-    const result = arr.myMap((num) => num * 5);
-    console.log(result); // [10, 15, 20, 25]
-    ```
-
-44. **Write a program to create a polyfill for the `filter` method in JavaScript.**
-
-    ```javascript
-    Array.prototype.myFilter = function (callback) {
-      let temp = [];
-      for (let i = 0; i < this.length; i++) {
-        if (callback(this[i], i, this)) {
-          temp.push(this[i]);
-        }
-      }
-      return temp;
-    };
-    const arr = [2, 3, 4, 5];
-    const result = arr.myFilter((num) => num > 2);
-    console.log(result); // [3, 4, 5]
-    ```
-
-45. **Write a program to create a polyfill for the `reduce` method in JavaScript.**
-    ```javascript
-    Array.prototype.myReduce = function (callback, initialValue) {
-      let accumulator = initialValue === undefined ? this[0] : initialValue;
-      for (let i = initialValue === undefined ? 1 : 0; i < this.length; i++) {
-        accumulator = callback(accumulator, this[i], i, this);
-      }
-      return accumulator;
-    };
-    const arr = [2, 3, 4, 5];
-    const sum = arr.myReduce((acc, curr) => acc + curr, 0);
-    console.log(sum); // 14
-    ```
