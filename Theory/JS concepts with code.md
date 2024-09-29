@@ -539,98 +539,98 @@ console.log(memoizedAdd(2, 3)); // Returns cached result
 
 ### 31. **Write a program to find element occurrence in an array.**
 
-    ```javascript
-    const arr = [1, 1, 2, 3, 1, 4];
-    const count = {};
-    arr.forEach((element) => {
-      count[element] = (count[element] || 0) + 1;
-    });
-    console.log(count); // { '1': 3, '2': 1, '3': 1, '4': 1 }
-    ```
+```javascript
+const arr = [1, 1, 2, 3, 1, 4];
+const count = {};
+arr.forEach((element) => {
+  count[element] = (count[element] || 0) + 1;
+});
+console.log(count); // { '1': 3, '2': 1, '3': 1, '4': 1 }
+```
 
 ### 32. **Write a program to remove duplicate items from an array.**
 
-    ```javascript
-    const arr = [1, 2, 3, 4, 1, 2];
-    const uniqueArr = [...new Set(arr)];
-    console.log(uniqueArr); // [1, 2, 3, 4]
-    ```
+```javascript
+const arr = [1, 2, 3, 4, 1, 2];
+const uniqueArr = [...new Set(arr)];
+console.log(uniqueArr); // [1, 2, 3, 4]
+```
 
 ### 33. **What will be the output of the given code snippet?**
 
-    ```javascript
-    const firstname = fun();
-    let name = "vivek";
-    function fun() {
-      return `my name is ${name} malviya`;
-    }
-    console.log(firstname); // Output: "my name is undefined malviya" because `name` is hoisted but not initialized before calling fun()
-    ```
+```javascript
+const firstname = fun();
+let name = "vivek";
+function fun() {
+  return `my name is ${name} malviya`;
+}
+console.log(firstname); // Output: "my name is undefined malviya" because `name` is hoisted but not initialized before calling fun()
+```
 
 ### 34. **Write a program to multiply two numbers without using the multiply sign in JavaScript.**
 
-    ```javascript
-    function multiply(a, b) {
-      let result = 0;
-      for (let i = 0; i < b; i++) {
-        result += a;
-      }
-      return result;
-    }
-    console.log(multiply(5, 3)); // Output: 15
-    ```
+```javascript
+function multiply(a, b) {
+  let result = 0;
+  for (let i = 0; i < b; i++) {
+    result += a;
+  }
+  return result;
+}
+console.log(multiply(5, 3)); // Output: 15
+```
 
 ### 35. **Write a program for sorting in JavaScript.**
 
-    ```javascript
-    const arr = [3, 2, 5, 4, 1, 0];
-    arr.sort((a, b) => a - b); // Ascending order
-    console.log(arr); // [0, 1, 2, 3, 4, 5]
-    ```
+```javascript
+const arr = [3, 2, 5, 4, 1, 0];
+arr.sort((a, b) => a - b); // Ascending order
+console.log(arr); // [0, 1, 2, 3, 4, 5]
+```
 
 ### 36. **Write a program to create a polyfill for the `map` method in JavaScript.**
 
-    ```javascript
-    Array.prototype.myMap = function (callback) {
-      let temp = [];
-      for (let i = 0; i < this.length; i++) {
-        temp.push(callback(this[i], i, this));
-      }
-      return temp;
-    };
-    const arr = [2, 3, 4, 5];
-    const result = arr.myMap((num) => num * 5);
-    console.log(result); // [10, 15, 20, 25]
-    ```
+```javascript
+Array.prototype.myMap = function (callback) {
+  let temp = [];
+  for (let i = 0; i < this.length; i++) {
+    temp.push(callback(this[i], i, this));
+  }
+  return temp;
+};
+const arr = [2, 3, 4, 5];
+const result = arr.myMap((num) => num * 5);
+console.log(result); // [10, 15, 20, 25]
+```
 
 ### 37. **Write a program to create a polyfill for the `filter` method in JavaScript.**
 
-    ```javascript
-    Array.prototype.myFilter = function (callback) {
-      let temp = [];
-      for (let i = 0; i < this.length; i++) {
-        if (callback(this[i], i, this)) {
-          temp.push(this[i]);
-        }
-      }
-      return temp;
-    };
-    const arr = [2, 3, 4, 5];
-    const result = arr.myFilter((num) => num > 2);
-    console.log(result); // [3, 4, 5]
-    ```
+```javascript
+Array.prototype.myFilter = function (callback) {
+  let temp = [];
+  for (let i = 0; i < this.length; i++) {
+    if (callback(this[i], i, this)) {
+      temp.push(this[i]);
+    }
+  }
+  return temp;
+};
+const arr = [2, 3, 4, 5];
+const result = arr.myFilter((num) => num > 2);
+console.log(result); // [3, 4, 5]
+```
 
 ### 38. **Write a program to create a polyfill for the `reduce` method in JavaScript.**
 
-    ```javascript
-    Array.prototype.myReduce = function (callback, initialValue) {
-      let accumulator = initialValue === undefined ? this[0] : initialValue;
-      for (let i = initialValue === undefined ? 1 : 0; i < this.length; i++) {
-        accumulator = callback(accumulator, this[i], i, this);
-      }
-      return accumulator;
-    };
-    const arr = [2, 3, 4, 5];
-    const sum = arr.myReduce((acc, curr) => acc + curr, 0);
-    console.log(sum); // 14
-    ```
+```javascript
+Array.prototype.myReduce = function (callback, initialValue) {
+  let accumulator = initialValue === undefined ? this[0] : initialValue;
+  for (let i = initialValue === undefined ? 1 : 0; i < this.length; i++) {
+    accumulator = callback(accumulator, this[i], i, this);
+  }
+  return accumulator;
+};
+const arr = [2, 3, 4, 5];
+const sum = arr.myReduce((acc, curr) => acc + curr, 0);
+console.log(sum); // 14
+```
