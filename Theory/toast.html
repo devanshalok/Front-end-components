@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toast Notification</title>
+    <style>
+        /* Basic styles for the toast container and individual toast messages */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .toast.success {
+            background-color: #28a745;
+        }
+
+        .toast.error {
+            background-color: #dc3545;
+        }
+
+        .toast.info {
+            background-color: #17a2b8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // Toast Component
+        function showToast(message, type = "info", duration = 3000) {
+            const toastContainer = document.getElementById("toast-container");
+
+            // Create the toast element
+            const toast = document.createElement("div");
+            toast.classList.add("toast", type);
+            toast.textContent = message;
+
+            // Append the toast to the container
+            toastContainer.appendChild(toast);
+
+            // Show the toast
+            setTimeout(() => {
+                toast.classList.add("show");
+            }, 100);
+
+            // Automatically remove the toast after the specified duration
+            setTimeout(() => {
+                toast.classList.remove("show");
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, duration);
+        }
+
+        // Example usage of the toast component
+        document.addEventListener("DOMContentLoaded", () => {
+            // Show a few example toasts
+            showToast("This is an info message!", "info", 3000);
+            showToast("This is a success message!", "success", 7000);
+            showToast("This is an error message!", "error", 10000);
+        });
+    </script>
+
+</body>
+
+</html>
