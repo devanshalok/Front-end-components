@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Text Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+
+        input {
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Real-Time Text Search with Highlighting</h1>
+
+    <input type="text" id="search-input" placeholder="Search in paragraph...">
+
+    <p id="text-paragraph">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales elementum tellus, non consectetur
+        libero. Sed suscipit felis magna, vel convallis augue aliquam eu. Nam vel facilisis nulla, nec varius justo.
+        Integer vehicula augue vitae ex elementum, ut aliquet urna posuere. Maecenas eu erat sed felis mollis tincidunt
+        sed at dui. Nullam laoreet auctor risus, in vulputate metus elementum eu. Fusce sit amet augue efficitur,
+        consequat mi sit amet, varius felis. Pellentesque ut ex felis.
+    </p>
+
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const textParagraph = document.getElementById('text-paragraph');
+        const originalText = textParagraph.textContent; // Save the original text for easy reference
+
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const paragraphText = originalText;
+
+            if (searchTerm === '') {
+                // If the search box is empty, reset the paragraph text
+                textParagraph.innerHTML = paragraphText;
+                return;
+            }
+
+            const highlightedText = highlightSearchTerm(paragraphText, searchTerm);
+            textParagraph.innerHTML = highlightedText;
+        });
+
+        function highlightSearchTerm(text, searchTerm) {
+            let result = '';
+            let index = 0;
+            let searchIndex;
+
+            // While loop to search and highlight every occurrence of the search term
+            while ((searchIndex = text.toLowerCase().indexOf(searchTerm, index)) !== -1) {
+                // Append text before the match
+                result += text.substring(index, searchIndex);
+                // Append highlighted match
+                result += `<span class="highlight">${text.substring(searchIndex, searchIndex + searchTerm.length)}</span>`;
+                // Move the index to the end of the match
+                index = searchIndex + searchTerm.length;
+            }
+
+            // Append any remaining text after the last match
+            result += text.substring(index);
+            return result;
+        }
+    </script>
+
+</body>
+
+</html>

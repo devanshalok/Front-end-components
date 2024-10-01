@@ -1,0 +1,25 @@
+To implement a real-time text search that highlights occurrences of a search term within a paragraph without using regular expressions, we can follow these steps:
+
+Split the Paragraph: As the user types a search term, split the paragraph text by that search term.
+Rebuild the Paragraph: Rebuild the paragraph, inserting HTML <span> tags around each occurrence of the search term to highlight it.
+Real-Time Updates: As the user types, the search results will update in real-time.
+
+Explanation:
+
+HTML Structure:
+An <input> field allows the user to type in the search term.
+A <p> element contains the paragraph where the search term will be highlighted.
+The search is performed in real-time, updating the paragraph as the user types.
+
+CSS Styling:
+The .highlight class is used to apply a yellow background to the matched search term.
+The input field and paragraph are styled to make the search interface clean and readable.
+
+JavaScript Logic:
+Saving Original Text: The original paragraph text is stored in originalText so that we can reference it when resetting the search or applying highlights.
+Event Listener: The input event listener on the search box listens for any changes as the user types.
+Real-Time Search: The highlightSearchTerm function searches for the search term in a case-insensitive manner by converting the text and search term to lowercase. Each match is wrapped with a <span> that uses the .highlight class to apply a yellow background.
+Dynamic HTML Update: The paragraph's HTML (innerHTML) is updated every time the user types, ensuring the highlights are displayed immediately.
+Highlighting Mechanism:
+
+Without Regex: Instead of using regular expressions, the solution uses the .indexOf() method in a while loop to find all occurrences of the search term in the paragraph. It constructs the new highlighted paragraph text by appending non-matching text and wrapping matching text in a <span> element.
