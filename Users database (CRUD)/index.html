@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users Database with CRUD and Modal Edit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        .form-group input {
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-input {
+            margin-bottom: 10px;
+            padding: 8px;
+            font-size: 16px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .modal-footer {
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>User Database</h1>
+
+    <!-- Filter Users -->
+    <input type="text" id="filter-input" class="filter-input" placeholder="Filter by name...">
+
+    <!-- User Form -->
+    <div class="form-group">
+        <label for="user-name">Name</label>
+        <input type="text" id="user-name" placeholder="Enter user name">
+    </div>
+    <div class="form-group">
+        <label for="user-email">Email</label>
+        <input type="email" id="user-email" placeholder="Enter user email">
+    </div>
+    <button id="add-user-btn">Add User</button>
+
+    <!-- Users Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="users-table">
+            <!-- User rows will go here -->
+        </tbody>
+    </table>
+
+    <!-- Modal for Editing User -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit User</h2>
+                <span class="close" id="close-modal">&times;</span>
+            </div>
+            <div class="form-group">
+                <label for="edit-name">Name</label>
+                <input type="text" id="edit-name">
+            </div>
+            <div class="form-group">
+                <label for="edit-email">Email</label>
+                <input type="email" id="edit-email">
+            </div>
+            <div class="modal-footer">
+                <button id="update-user-btn">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Users array (acting as a simulated database)
+        let users = [];
+        let currentUserId = 1; // ID tracker
+        let userToEdit = null; // Store user to be edited
+
+        const userNameInput = document.getElementById('user-name');
+        const userEmailInput = document.getElementById('user-email');
+        const addUserBtn = document.getElementById('add-user-btn');
+        const usersTable = document.getElementById('users-table');
+        const filterInput = document.getElementById('filter-input');
+
+        const editModal = document.getElementById('edit-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const updateUserBtn = document.getElementById('update-user-btn');
+        const editNameInput = document.getElementById('edit-name');
+        const editEmailInput = document.getElementById('edit-email');
+
+        // Add User
+        addUserBtn.addEventListener('click', () => {
+            const name = userNameInput.value.trim();
+            const email = userEmailInput.value.trim();
+
+            if (name && email) {
+                users.push({ id: currentUserId++, name, email });
+                userNameInput.value = '';
+                userEmailInput.value = '';
+                renderUsers();
+            } else {
+                alert('Please enter both name and email.');
+            }
+        });
+
+        // Render Users
+        function renderUsers(filteredUsers = users) {
+            usersTable.innerHTML = ''; // Clear table
+            filteredUsers.forEach(user => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td class="actions">
+                    <button onclick="openEditModal(${user.id})">Edit</button>
+                    <button onclick="deleteUser(${user.id})">Delete</button>
+                </td>
+            `;
+
+                usersTable.appendChild(row);
+            });
+        }
+
+        // Open the modal and pre-fill the form with the user data
+        function openEditModal(userId) {
+            userToEdit = users.find(user => user.id === userId);
+            if (userToEdit) {
+                editNameInput.value = userToEdit.name;
+                editEmailInput.value = userToEdit.email;
+                editModal.style.display = 'flex';
+            }
+        }
+
+        // Close the modal
+        closeModalBtn.addEventListener('click', () => {
+            editModal.style.display = 'none';
+        });
+
+        // Update the user when "Update" button is clicked
+        updateUserBtn.addEventListener('click', () => {
+            if (userToEdit) {
+                userToEdit.name = editNameInput.value;
+                userToEdit.email = editEmailInput.value;
+                renderUsers();
+                editModal.style.display = 'none'; // Close modal
+            }
+        });
+
+        // Delete User
+        function deleteUser(userId) {
+            users = users.filter(user => user.id !== userId);
+            renderUsers();
+        }
+
+        // Filter Users by name
+        filterInput.addEventListener('input', () => {
+            const filterValue = filterInput.value.toLowerCase();
+            const filteredUsers = users.filter(user =>
+                user.name.toLowerCase().includes(filterValue)
+            );
+            renderUsers(filteredUsers);
+        });
+
+    </script>
+
+</body>
+
+</html>
