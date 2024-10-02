@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modal Dialog</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        /* Button to open the modal */
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent background */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* Close button */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #333;
+        }
+
+        .close-btn:hover {
+            color: red;
+        }
+
+        .modal-header {
+            margin-bottom: 10px;
+        }
+
+        .modal-body {
+            padding: 10px 0;
+        }
+
+        .modal-footer {
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Button to open the modal -->
+    <button id="open-modal-btn">Open Modal</button>
+
+    <!-- Modal Structure -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" id="close-modal-btn">&times;</button>
+            <div class="modal-header">
+                <h2>Modal Title</h2>
+            </div>
+            <div class="modal-body">
+                <p>This is a sample modal dialog. You can put any content here.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="close-btn" id="close-footer-btn"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById("modal");
+        const openModalBtn = document.getElementById("open-modal-btn");
+        const closeModalBtn = document.getElementById("close-modal-btn");
+        const closeFooterBtn = document.getElementById("close-footer-btn");
+
+        // Open modal when the button is clicked
+        openModalBtn.addEventListener("click", () => {
+            modal.style.display = "flex"; // Show modal
+        });
+
+        // Close modal when the close button (top right) is clicked
+        closeModalBtn.addEventListener("click", () => {
+            modal.style.display = "none"; // Hide modal
+        });
+
+        // Close modal when the close button in the footer is clicked
+        closeFooterBtn.addEventListener("click", () => {
+            modal.style.display = "none"; // Hide modal
+        });
+
+        // Close modal when clicking outside the modal content
+        window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none"; // Hide modal
+            }
+        });
+    </script>
+</body>
+
+</html>
