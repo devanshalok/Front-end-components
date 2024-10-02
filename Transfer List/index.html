@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer List with Sorting</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .transfer-list-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        select {
+            width: 200px;
+            height: 200px;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="transfer-list-container">
+        <!-- Left List -->
+        <select id="left-list" multiple>
+            <option value="item1">Item 1</option>
+            <option value="item2">Item 2</option>
+            <option value="item3">Item 3</option>
+            <option value="item4">Item 4</option>
+            <option value="item5">Item 5</option>
+        </select>
+
+        <!-- Buttons to move items -->
+        <div class="button-container">
+            <button id="move-right">&gt;&gt;</button>
+            <button id="move-left">&lt;&lt;</button>
+        </div>
+
+        <!-- Right List -->
+        <select id="right-list" multiple></select>
+    </div>
+
+    <script>
+        const moveRightButton = document.getElementById('move-right');
+        const moveLeftButton = document.getElementById('move-left');
+        const leftList = document.getElementById('left-list');
+        const rightList = document.getElementById('right-list');
+
+        
+
+        // Move selected items from left to right
+        moveRightButton.addEventListener('click', () => {
+            moveItems(leftList, rightList);
+            sortList(rightList);
+            sortList(leftList);
+        });
+
+        // Move selected items from right to left
+        moveLeftButton.addEventListener('click', () => {
+            moveItems(rightList, leftList);
+            sortList(rightList);
+            sortList(leftList);
+        });
+
+        // Function to move items between lists
+        function moveItems(fromList, toList) {
+            const selectedOptions = [...fromList.selectedOptions]; // Get selected options as an array
+            selectedOptions.forEach(option => {
+                toList.appendChild(option); // Move option to the other list
+            });
+
+            // Deselect all options in both lists
+            fromList.selectedIndex = -1;
+            toList.selectedIndex = -1;
+        }
+
+        // Function to sort the items in a list alphabetically
+        function sortList(list) {
+            const itemsArray = [...list.options]; // Get all options from the list
+            itemsArray.sort((a, b) => a.text.localeCompare(b.text)); // Sort options alphabetically
+
+            // Remove existing options and append sorted options
+            list.innerHTML = '';
+            itemsArray.forEach(item => list.appendChild(item));
+        }
+    </script>
+
+</body>
+
+</html>
