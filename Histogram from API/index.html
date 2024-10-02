@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histogram of Birth Years</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        #histogram-container {
+            width: 80%;
+            max-width: 700px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Histogram of Birth Years</h1>
+    <div class="loading" id="loading">Fetching birth year data...</div>
+    <div id="histogram-container">
+        <canvas id="histogram"></canvas>
+    </div>
+
+    <script>
+        const apiUrl = 'https://randomuser.me/api/?results=100'; // Sample API for generating random users
+        const birthYears = [];
+
+        // Function to fetch user data from API
+        async function fetchUserData() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                data.results.forEach(user => {
+                    const birthYear = new Date(user.dob.date).getFullYear();
+                    birthYears.push(birthYear);
+                });
+                drawHistogram(birthYears);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Function to draw the histogram using Chart.js
+        function drawHistogram(years) {
+            const loadingElement = document.getElementById('loading');
+            loadingElement.style.display = 'none'; // Hide loading message
+
+            // Count the occurrences of each birth year
+            const yearCounts = years.reduce((counts, year) => {
+                counts[year] = (counts[year] || 0) + 1;
+                return counts;
+            }, {});
+
+            // Sort years and prepare data for the chart
+            const sortedYears = Object.keys(yearCounts).sort((a, b) => a - b);
+            const frequencies = sortedYears.map(year => yearCounts[year]);
+
+            // Create the chart
+            const ctx = document.getElementById('histogram').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedYears, // The x-axis will display the birth years
+                    datasets: [{
+                        label: 'Number of People',
+                        data: frequencies, // The y-axis will display the count of people born in each year
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Birth Year',
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Frequency'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fetch user data and draw the histogram
+        fetchUserData();
+    </script>
+
+</body>
+
+</html>
