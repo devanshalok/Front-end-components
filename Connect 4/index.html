@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(7, 60px);
+            grid-template-rows: repeat(6, 60px);
+            gap: 5px;
+        }
+
+        .cell {
+            width: 60px;
+            height: 60px;
+            background-color: #007bff;
+            border-radius: 5px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .disc {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .yellow {
+            background-color: yellow;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <div class="message" id="message">Player 1's Turn (Red)</div>
+        <div class="board" id="board"></div>
+        <button id="reset-btn">Reset Game</button>
+    </div>
+
+    <script>
+        const rows = 6;
+        const columns = 7;
+        let currentPlayer = 'red'; // Player 1 (red) starts
+        const board = [];
+        const boardElement = document.getElementById('board');
+        const messageElement = document.getElementById('message');
+        const resetButton = document.getElementById('reset-btn');
+
+        // Create the board array and render the grid
+        function createBoard() {
+            boardElement.innerHTML = ''; // Clear the board visually
+            for (let row = 0; row < rows; row++) {
+                board[row] = [];
+                for (let col = 0; col < columns; col++) {
+                    board[row][col] = null; // Empty slot
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.column = col;
+                    cell.addEventListener('click', () => handleCellClick(col));
+                    boardElement.appendChild(cell);
+                }
+            }
+        }
+
+        // Handle click on a column
+        function handleCellClick(column) {
+            // Drop the disc to the lowest empty row in the selected column
+            for (let row = rows - 1; row >= 0; row--) {
+                if (!board[row][column]) {
+                    board[row][column] = currentPlayer; // Set the current player in the board array
+                    renderDisc(row, column, currentPlayer);
+                    if (checkWin(row, column)) {
+                        messageElement.textContent = `Player ${currentPlayer === 'red' ? 1 : 2} (${currentPlayer}) wins!`;
+                        disableBoard(); // Disable further moves
+                    } else if (board.flat().every(cell => cell !== null)) {
+                        messageElement.textContent = `It's a tie!`;
+                    } else {
+                        switchPlayer(); // Switch turns if no win
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Render a disc at the given row and column
+        function renderDisc(row, column, color) {
+            const cell = boardElement.children[row * columns + column];
+            const disc = document.createElement('div');
+            disc.classList.add('disc', color);
+            cell.appendChild(disc);
+        }
+
+        // Switch between players
+        function switchPlayer() {
+            currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+            messageElement.textContent = `Player ${currentPlayer === 'red' ? 1 : 2}'s Turn (${currentPlayer === 'red' ? 'Red' : 'Yellow'})`;
+        }
+
+        // Disable the board after a win or tie
+        function disableBoard() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => cell.removeEventListener('click', () => { }));
+        }
+
+        // Check for a win (4 discs in a row)
+        function checkWin(row, column) {
+            return checkDirection(row, column, 1, 0) || // Horizontal
+                checkDirection(row, column, 0, 1) || // Vertical
+                checkDirection(row, column, 1, 1) || // Diagonal /
+                checkDirection(row, column, 1, -1);  // Diagonal \
+        }
+
+        // Check a specific direction for 4 in a row
+        function checkDirection(row, column, rowIncrement, colIncrement) {
+            let count = 0;
+            for (let i = -3; i <= 3; i++) {
+                const newRow = row + i * rowIncrement;
+                const newCol = column + i * colIncrement;
+                if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns && board[newRow][newCol] === currentPlayer) {
+                    count++;
+                    if (count === 4) return true;
+                } else {
+                    count = 0;
+                }
+            }
+            return false;
+        }
+
+        // Reset the game
+        resetButton.addEventListener('click', () => {
+            currentPlayer = 'red'; // Player 1 (red) starts
+            messageElement.textContent = "Player 1's Turn (Red)";
+            createBoard();
+        });
+
+        // Initialize the game
+        createBoard();
+    </script>
+
+</body>
+
+</html>

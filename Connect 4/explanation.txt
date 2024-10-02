@@ -1,0 +1,32 @@
+Key Features:
+Grid Setup: A 6x7 grid where players take turns dropping discs into a column.
+Turn-Based Gameplay: Two players (Player 1 and Player 2) take turns.
+Win Condition: Check for a win when a player places four discs in a row, either vertically, horizontally, or diagonally.
+Game Reset: Ability to reset the game after someone wins.
+
+Explanation:
+
+HTML Structure:
+A div is used to display the message indicating whose turn it is and who wins.
+A div with class board is where the game grid (6 rows x 7 columns) is created dynamically using JavaScript.
+The Reset button is used to restart the game.
+
+CSS Styling:
+Board Grid: The grid is set up using CSS Grid, with each cell being 60x60 pixels. The grid has gaps between the cells to visually separate them.
+Discs: The discs (representing the players' moves) are styled as circles (border-radius: 50%) with either red or yellow color depending on the player.
+
+JavaScript Logic:
+Board Setup: The createBoard function initializes the 6x7 grid and listens for clicks on each column.
+Turn Management: switchPlayer handles alternating between Player 1 (Red) and Player 2 (Yellow).
+Disc Placement: Clicking on a column will drop a disc into the lowest available row of that column.
+Win Condition: The game checks for four consecutive discs of the same color in horizontal, vertical, or diagonal directions using the checkWin and checkDirection functions.
+Game Reset: The game can be reset by clicking the "Reset" button, which clears the board and restarts the game.
+
+Win Checking:
+
+When a player drops a disc, the game checks the grid to see if there are four consecutive discs in a row, either horizontally, vertically, or diagonally. The checkDirection function checks a specific direction for matches.
+Game Flow:
+Players take turns dropping discs into the grid.
+After each move, the game checks if that move resulted in a win.
+If a player wins, the board is disabled, and a message is displayed.
+The game can be reset at any time.
