@@ -1,0 +1,29 @@
+To implement a grid of lights where the lights turn off in reverse order in which they are turned on, we need to:
+
+Create a Grid: A grid of "lights" represented as clickable squares.
+Toggle the Lights: When a light is clicked, it turns "on" (colored) and is added to a stack (to track the order in which lights are turned on).
+Turn Off in Reverse: When the user clicks a button, the lights should turn off in the reverse order in which they were turned on.
+
+Explanation:
+
+HTML Structure:
+Grid: A div with the class grid that contains 25 lights (5x5 grid).
+Button: A button labeled "Turn Off Lights in Reverse" to trigger the reverse turn-off of the lights.
+
+CSS Styling:
+Grid Layout: The grid is created using CSS Grid with 5 columns and some spacing between the lights.
+Lights: Each light is styled as a square (60px x 60px) with a default background color of light gray. When the light is turned on, it changes to yellow.
+Transition: The background color changes smoothly when a light is toggled (transition: background-color 0.3s).
+
+JavaScript Logic:
+Grid Creation: A loop creates 25 light elements and appends them to the grid.
+Toggling Lights: When a light is clicked:
+If the light is already on, nothing happens.
+If it's off, it turns on and is added to a stack (lightStack). The stack stores the order in which lights were turned on.
+Turning Off in Reverse: When the "Turn Off Lights in Reverse" button is clicked, the most recently turned on light is popped from the stack and turned off. This continues until all lights are off.
+If there are no more lights to turn off, an alert is displayed.
+
+How It Works:
+Turn Lights On: Click any light in the grid. The light will turn yellow, and its reference will be added to the stack (lightStack).
+Turn Lights Off: Click the "Turn Off Lights in Reverse" button. The lights will turn off in the reverse order in which they were turned on (i.e., last-on, first-off).
+No More Lights to Turn Off: When all lights are turned off, the button click will show an alert saying "No more lights to turn off!"

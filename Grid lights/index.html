@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Lights with Reverse Turn Off</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        /* Grid of lights */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 60px);
+            grid-gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .light {
+            width: 60px;
+            height: 60px;
+            background-color: #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .light.on {
+            background-color: yellow;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Grid Lights with Reverse Turn Off</h1>
+
+    <div class="grid" id="grid"></div>
+    <button id="turn-off-btn">Turn Off Lights in Reverse</button>
+
+    <script>
+        const gridElement = document.getElementById('grid');
+        const turnOffButton = document.getElementById('turn-off-btn');
+        const lightStack = []; // Stack to track the order of lights turned on
+
+        // Create a 5x5 grid of lights
+        for (let i = 0; i < 25; i++) {
+            const light = document.createElement('div');
+            light.classList.add('light');
+            light.dataset.index = i; // Set an index to identify each light
+            light.addEventListener('click', () => toggleLight(light)); // Add event listener for each light
+            gridElement.appendChild(light);
+        }
+
+        // Toggle the light on and off
+        function toggleLight(light) {
+            if (light.classList.contains('on')) {
+                // If the light is already on, do nothing
+                return;
+            }
+
+            // Turn on the light and add it to the stack
+            light.classList.add('on');
+            lightStack.push(light);
+        }
+
+        // Turn off lights in reverse order
+         turnOffButton.addEventListener('click', () => {
+                if (lightStack.length > 0) {
+                    const light = lightStack.pop(); // Remove the last turned on light from the stack
+                    light.classList.remove('on');   // Turn off the light
+                } else {
+                    alert('No more lights to turn off!');
+                }
+            });
+            // Turn off the lights automgically with 1 second delay
+    //    turnOffButton.addEventListener('click', () => {
+    //         function turnOffLightsWithDelay() {
+    //             if (lightStack.length != 0) {
+    //                 const light = lightStack.pop();  // Remove the last turned on light from the stack
+    //                 light.classList.remove('on');    // Turn off the light
+
+    //                 // Set a timeout to call the function recursively after 1 second
+    //                 setTimeout(turnOffLightsWithDelay, 1000);
+    //             } else {
+    //                 alert('No more lights to turn off!');
+    //             }
+    //         }
+
+    //         // Start the process
+    //         turnOffLightsWithDelay();
+    //     });
+
+    </script>
+
+</body>
+
+</html>
