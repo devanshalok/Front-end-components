@@ -1,0 +1,56 @@
+Key Features of the Job Board:
+Job Title: Displays the title of the job.
+Poster: Displays the user who posted the job.
+Date Posted: Displays the date when the job was posted.
+Fetching from Hacker News API: Fetches and displays the latest job postings from the API.
+
+Explanation:
+
+HTML Structure:
+The <ul> element with the class job-list will contain the fetched job postings.
+A loading indicator (<div id="loading">Loading job postings...</div>) is shown while the jobs are being fetched.
+
+CSS Styling:
+The jobs are displayed as a clean list with each job posting styled as a card with padding and a shadow.
+Simple, clean, and mobile-friendly design to display job titles, posters, and dates.
+
+JavaScript Functionality:
+Fetching Job IDs: The fetchJobIds function fetches an array of job IDs from Hacker News using the /jobstories.json endpoint.
+Fetching Job Details: The fetchJobDetails function fetches the details of each job (e.g., title, poster, and date) using each job's ID from the /item/{id}.json endpoint.
+Rendering Jobs: The renderJob function creates the HTML structure for each job posting, displaying the job title, the name of the person who posted it (job.by), and the posting date (job.time).
+Date Formatting: The formatDate function converts the Unix timestamp (seconds since 1970) into a human-readable date and time format using toLocaleDateString and toLocaleTimeString.
+
+Fetching and Displaying Jobs:
+The displayJobs function fetches the job IDs and then iterates over the first 10 job IDs (for demonstration purposes) to fetch the details for each job and render them on the page.
+Once all jobs are fetched, the loading message is hidden.
+Key Features:
+Job Title: Displays the title of the job posting.
+Poster: Displays the username of the person who posted the job.
+Date Posted: Displays the date when the job was posted.
+Loading Indicator: Shows a "Loading..." message while the data is being fetched from the Hacker News API.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+To add pagination to our job board, we need to fetch a limited number of job postings per page and allow the user to navigate between pages. The basic idea is to:
+
+Limit the Number of Jobs Displayed: Display a specific number of job postings per page (e.g., 5 or 10).
+Calculate Total Pages: Based on the total number of jobs, determine how many pages are needed.
+Display Pagination Controls: Show "Previous" and "Next" buttons or page numbers that allow the user to navigate between pages.
+Fetch Data for the Selected Page: Fetch and render job postings for the currently selected page.
+
+Steps to Add Pagination:
+Set Jobs Per Page: Determine how many jobs to show per page (e.g., 10).
+Track the Current Page: Maintain a currentPage variable to keep track of which page the user is on.
+Display Job Listings Based on the Page: Only display jobs for the current page.
+Update Job Listings When Navigating: When the user clicks "Next" or "Previous," the job postings will be updated.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Key Changes for Infinite Scroll:
+Remove Pagination: I removed the pagination buttons (prevButton and nextButton) and replaced them with infinite scroll logic.
+Scroll Event Listener: Added an event listener for the scroll event that checks if the user is close to the bottom of the page. If so, it triggers loading the next page of jobs.
+Loading State: Added a loading flag to prevent multiple concurrent requests while fetching data.
+
+Explanation:
+Scroll Detection: When the user scrolls near the bottom of the page (within 100px of the bottom), the next set of jobs is fetched and rendered.
+Loading Indicator: The loadingElement shows a "Loading job postings..." message while the next batch of jobs is being fetched. It is hidden again once the jobs are rendered.
+Avoiding Duplicate Requests: The loading variable ensures that no new requests are made until the current batch of jobs has finished loading.

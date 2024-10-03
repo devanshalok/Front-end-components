@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Board - Hacker News Jobs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .job-list {
+            width: 80%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .job-list li {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-list li h2 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+
+        .job-list li .poster {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .job-list li .date-posted {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .loading {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Latest Job Postings from Hacker News</h1>
+    <ul class="job-list" id="job-list"></ul>
+    <div class="loading" id="loading">Loading job postings...</div>
+
+    <div class="pagination" id="pagination">
+        <button id="prev-btn" disabled>Previous</button>
+        <button id="next-btn">Next</button>
+    </div>
+
+    <script>
+        const jobListElement = document.getElementById('job-list');
+        const loadingElement = document.getElementById('loading');
+        const prevButton = document.getElementById('prev-btn');
+        const nextButton = document.getElementById('next-btn');
+        const jobsPerPage = 10; // Number of jobs per page
+        let currentPage = 1;
+        let jobIds = [];
+
+        // Fetch the job story IDs from Hacker News
+        async function fetchJobIds() {
+            const response = await fetch('https://hacker-news.firebaseio.com/v0/jobstories.json');
+            return await response.json();
+        }
+
+        // Fetch job details for a specific job ID
+        async function fetchJobDetails(jobId) {
+            const response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${jobId}.json`);
+            return await response.json();
+        }
+
+        // Convert Unix timestamp to human-readable date
+        function formatDate(unixTimestamp) {
+            const date = new Date(unixTimestamp * 1000);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
+
+        // Render a single job posting
+        function renderJob(job) {
+            const jobItem = document.createElement('li');
+
+            const jobTitle = document.createElement('h2');
+            jobTitle.textContent = job.title || 'No title available';
+
+            const jobPoster = document.createElement('div');
+            jobPoster.classList.add('poster');
+            jobPoster.textContent = `Posted by: ${job.by || 'Anonymous'}`;
+
+            const jobDate = document.createElement('div');
+            jobDate.classList.add('date-posted');
+            jobDate.textContent = `Date posted: ${formatDate(job.time)}`;
+
+            jobItem.appendChild(jobTitle);
+            jobItem.appendChild(jobPoster);
+            jobItem.appendChild(jobDate);
+
+            jobListElement.appendChild(jobItem);
+        }
+
+        // Render jobs for the current page
+        async function renderJobsForPage(page) {
+            jobListElement.innerHTML = ''; // Clear previous jobs
+            loadingElement.style.display = 'block'; // Show loading
+            const start = (page - 1) * jobsPerPage;
+            const end = start + jobsPerPage;
+            const jobsToDisplay = jobIds.slice(start, end);
+
+            for (const jobId of jobsToDisplay) {
+                const job = await fetchJobDetails(jobId);
+                renderJob(job);
+            }
+
+            loadingElement.style.display = 'none'; // Hide loading
+            updatePaginationButtons(); // Update pagination controls
+        }
+
+        // Update the pagination buttons
+        function updatePaginationButtons() {
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage * jobsPerPage >= jobIds.length;
+        }
+
+        // Initialize the job board
+        async function displayJobs() {
+            try {
+                jobIds = await fetchJobIds(); // Fetch all job IDs
+
+                // Render the first page
+                renderJobsForPage(currentPage);
+            } catch (error) {
+                console.error('Error fetching job postings:', error);
+            }
+        }
+
+        // Handle pagination controls
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderJobsForPage(currentPage);
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentPage * jobsPerPage < jobIds.length) {
+                currentPage++;
+                renderJobsForPage(currentPage);
+            }
+        });
+
+        // Display the job postings on page load
+        displayJobs();
+    </script>
+
+</body>
+
+</html>
