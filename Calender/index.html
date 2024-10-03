@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .calendar-container {
+            display: inline-block;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .calendar-header {
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .day-name {
+            font-weight: bold;
+        }
+
+        .day,
+        .day-name {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 4px;
+            background-color: #f4f4f4;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .day:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .day.selected {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .day-name {
+            background-color: transparent;
+            color: black;
+            cursor: default;
+        }
+
+        .empty {
+            background-color: transparent;
+            cursor: default;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <label for="month">Month:</label>
+            <select id="month"></select>
+
+            <label for="year">Year:</label>
+            <select id="year"></select>
+        </div>
+
+        <div class="days-grid" id="days-grid"></div>
+    </div>
+
+    <script>
+        const monthDropdown = document.getElementById('month');
+        const yearDropdown = document.getElementById('year');
+        const daysGrid = document.getElementById('days-grid');
+
+        // Months and current year
+        const months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        const currentYear = new Date().getFullYear();
+
+        // Populate months dropdown
+        months.forEach((month, index) => {
+            const option = document.createElement('option');
+            option.value = index; // Store index (0-11) for months
+            option.textContent = month;
+            monthDropdown.appendChild(option);
+        });
+
+        // Populate years dropdown (last 20 years and next 20 years)
+        for (let i = currentYear - 20; i <= currentYear + 20; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            yearDropdown.appendChild(option);
+        }
+
+        // Set current month and year as default
+        monthDropdown.value = new Date().getMonth();
+        yearDropdown.value = currentYear;
+
+        // Weekday names (starting from Monday)
+        const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+        // Function to get the number of days in a month
+        function getDaysInMonth(month, year) {
+            return new Date(year, month + 1, 0).getDate();
+        }
+
+        // Function to get the starting day of the month (0 = Sunday, 1 = Monday, ...)
+        function getStartDayOfMonth(month, year) {
+            const firstDay = new Date(year, month, 1).getDay();
+            // Adjust so that Monday is considered the first day of the week (1 - Sunday should be treated as 7)
+            return firstDay === 0 ? 7 : firstDay;
+        }
+
+        // Function to render the days of the selected month and year
+        function renderCalendar(month, year) {
+            daysGrid.innerHTML = ''; // Clear previous days
+            const daysInMonth = getDaysInMonth(month, year);
+            const startDay = getStartDayOfMonth(month, year);
+
+            // Render the day names
+            weekDays.forEach(day => {
+                const dayNameElement = document.createElement('div');
+                dayNameElement.classList.add('day-name');
+                dayNameElement.textContent = day;
+                daysGrid.appendChild(dayNameElement);
+            });
+
+            // Add empty elements for days before the 1st of the month (to align the days correctly)
+            for (let i = 1; i < startDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.classList.add('empty');
+                daysGrid.appendChild(emptyDay);
+            }
+
+            // Create days for the current month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+                dayElement.textContent = day;
+
+                // Add click event to select day
+                dayElement.addEventListener('click', function () {
+                    // Remove 'selected' class from previously selected days
+                    document.querySelectorAll('.day').forEach(d => d.classList.remove('selected'));
+                    // Add 'selected' class to the clicked day
+                    dayElement.classList.add('selected');
+                });
+
+                daysGrid.appendChild(dayElement);
+            }
+        }
+
+        // Initial rendering of the calendar
+        renderCalendar(monthDropdown.value, yearDropdown.value);
+
+        // Event listener for month and year changes
+        monthDropdown.addEventListener('change', () => {
+            renderCalendar(monthDropdown.value, yearDropdown.value);
+        });
+
+        yearDropdown.addEventListener('change', () => {
+            renderCalendar(monthDropdown.value, yearDropdown.value);
+        });
+    </script>
+
+</body>
+
+</html>
+
