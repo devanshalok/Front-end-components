@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Undoable Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .counter-display {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Undoable Counter</h1>
+
+    <div class="counter-display" id="counter-display">0</div>
+
+    <div class="buttons-container">
+        <button class="change-btn" data-value="1">+1</button>
+        <button class="change-btn" data-value="10">+10</button>
+        <button class="change-btn" data-value="100">+100</button>
+        <button class="change-btn" data-value="-1">-1</button>
+        <button class="change-btn" data-value="-10">-10</button>
+        <button class="change-btn" data-value="-100">-100</button>
+    </div>
+
+    <div class="undo-redo-container">
+        <button id="undo-btn" disabled>Undo</button>
+        <button id="redo-btn" disabled>Redo</button>
+    </div>
+
+    <h2>History</h2>
+    <ul id="history-list"></ul>
+
+    <script>
+        let counter = 0;
+        const history = [];
+        const undoneActions = [];
+
+        const counterDisplay = document.getElementById("counter-display");
+        const historyList = document.getElementById("history-list");
+        const undoBtn = document.getElementById("undo-btn");
+        const redoBtn = document.getElementById("redo-btn");
+
+        // Function to update the counter display
+        function updateCounterDisplay() {
+            counterDisplay.textContent = counter;
+        }
+
+        // Function to add an entry to the history list
+        function addHistoryEntry(action, before, after) {
+            const entry = `${action} (${before} -> ${after})`;
+            const listItem = document.createElement("li");
+            listItem.textContent = entry;
+            historyList.appendChild(listItem);
+            history.push({ action, before, after });
+            if (history.length > 50) {
+                history.shift(); // Remove the oldest action if history exceeds 50 entries
+                historyList.removeChild(historyList.firstChild);
+            }
+            undoneActions.length = 0; // Clear redo stack on new action
+            redoBtn.disabled = true; // Disable redo button
+        }
+
+        // Function to update history display after undo/redo
+        function updateHistoryDisplay() {
+            historyList.innerHTML = ""; // Clear the history list
+            history.forEach((entry) => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `${entry.action} (${entry.before} -> ${entry.after})`;
+                historyList.appendChild(listItem);
+            });
+        }
+
+        // Function to handle undo
+        function undo() {
+            if (history.length > 0) {
+                const lastAction = history.pop();
+                undoneActions.push(lastAction);
+                counter = lastAction.before;
+                updateCounterDisplay();
+                updateHistoryDisplay();
+                redoBtn.disabled = false; // Enable redo button
+            }
+            undoBtn.disabled = history.length === 0; // Disable undo if history is empty
+        }
+
+        // Function to handle redo
+        function redo() {
+            if (undoneActions.length > 0) {
+                const actionToRedo = undoneActions.pop();
+                history.push(actionToRedo);
+                counter = actionToRedo.after;
+                updateCounterDisplay();
+                updateHistoryDisplay();
+            }
+            redoBtn.disabled = undoneActions.length === 0; // Disable redo if no more actions
+        }
+
+        // Event listeners for buttons
+        document.querySelectorAll(".change-btn").forEach((button) => {
+            button.addEventListener("click", () => {
+                const value = parseInt(button.dataset.value);
+                const before = counter;
+                counter += value;
+                addHistoryEntry(`${value > 0 ? "+" : ""}${value}`, before, counter);
+                updateCounterDisplay();
+                undoBtn.disabled = false; // Enable undo button after an action
+            });
+        });
+
+        // Undo button event listener
+        undoBtn.addEventListener("click", undo);
+
+        // Redo button event listener
+        redoBtn.addEventListener("click", redo);
+    </script>
+</body>
+
+</html>

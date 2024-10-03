@@ -1,0 +1,44 @@
+To implement an undoable counter with history and undo/redo functionality, we need to:
+
+Counter Logic: The counter will start at 0, and buttons will add or subtract specific values (+1, +10, +100, -1, -10, -100).
+History Tracking: Each action will be recorded in the history, displaying the action and the before/after values.
+Undo/Redo Functionality: Clicking "Undo" will undo the last action and update the history, while "Redo" will reapply the last undone action.
+History Limit: The history will store up to 50 actions.
+Button States: The "Redo" button will be disabled until the user clicks "Undo".
+
+Explanation:
+
+HTML Structure:
+Counter Display: The counter value is displayed inside a div (id="counter-display").
+Buttons: We have buttons for changing the counter value (+1, +10, +100, -1, -10, -100).
+Undo/Redo Buttons: Two buttons for undoing and redoing actions (Undo and Redo).
+History List: An unordered list (<ul>) displays the history of actions taken on the counter.
+
+CSS Styling:
+Simple styling for the buttons and counter display.
+The undo and redo buttons are disabled by default and become enabled/disabled based on the user's actions.
+
+JavaScript Logic:
+Counter: The counter starts at 0.
+History and Undo/Redo Stacks:
+history[] keeps track of the past actions, storing both the action and the before/after values.
+undoneActions[] keeps track of undone actions, allowing them to be redone later.
+History Limit: If the history exceeds 50 entries, the oldest action is removed.
+Button Clicks:
+Clicking any + or - button adjusts the counter, adds the action to the history, and updates the display.
+Clicking Undo reverts the last action, moving it to the undoneActions[] stack.
+Clicking Redo re-applies the last undone action, moving it back to the history.
+Disable/Enable Buttons:
+The Undo button is enabled only when there is history.
+The Redo button is enabled only after an undo action.
+
+Key Features:
+Undo: Click "Undo" to undo the last action (e.g., if +10 was clicked, the counter will subtract 10).
+Redo: After undoing, click "Redo" to re-apply the last undone action.
+History: Every action shows a history entry in the format ACTION (BEFORE -> AFTER).
+
+How It Works:
+Adding to the Counter: Click any of the buttons like +1, +10, +100, etc. This will modify the counter and show an entry in the history.
+Undoing Actions: Clicking the Undo button will reverse the last action and remove the entry from the history.
+Redoing Actions: Clicking Redo after undoing will re-apply the last undone action and add it back to the history.
+History Limit: The history is capped at 50 entries, with older entries being removed as new ones are added.
