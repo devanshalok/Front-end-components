@@ -1,0 +1,39 @@
+To implement a nested checkbox system where each parent checkbox can have multiple child checkboxes, and selecting/deselecting a parent checkbox will automatically select/deselect its children, we need the following:
+
+Parent Checkboxes: These will control the state of the child checkboxes.
+Child Checkboxes: These can be selected/deselected individually. If all child checkboxes under a parent are selected, the parent checkbox should also be selected.
+Interactivity: Selecting a parent checkbox should automatically check/uncheck all of its children, and selecting/deselecting individual child checkboxes should adjust the state of the parent accordingly.
+
+Explanation:
+
+HTML Structure:
+Each parent checkbox (.parent-checkbox) has associated child checkboxes (.child-checkbox).
+The child checkboxes are indented under their respective parents for clarity.
+Each parent and its children are grouped in a div with the class .checkbox-group to easily manage relationships.
+
+CSS Styling:
+Simple styles to structure the checkboxes with spacing and indentation for clarity.
+Children are indented under the parent checkbox using margin-left.
+
+JavaScript Logic:
+Parent Checkbox Logic:
+When a parent checkbox is clicked, all child checkboxes under that parent are selected or deselected accordingly.
+Child Checkbox Logic:
+When a child checkbox is clicked, the parent checkbox adjusts its state:
+Checked: If all child checkboxes are selected, the parent checkbox will be fully checked.
+Indeterminate: If only some of the child checkboxes are selected, the parent checkbox will show an indeterminate state (indeterminate = true).
+Unchecked: If no child checkboxes are selected, the parent checkbox will be unchecked.
+
+Indeterminate State:
+The parent checkbox enters the "indeterminate" state when only some (but not all) of its child checkboxes are checked. This state visually indicates that the parent checkbox is partially selected.
+
+How It Works:
+
+Parent Checkbox Behavior:
+Clicking on a parent checkbox will automatically check or uncheck all of its child checkboxes.
+
+Child Checkbox Behavior:
+Clicking on any child checkbox will automatically update the parent checkbox:
+If all child checkboxes are selected, the parent checkbox will be fully checked.
+If only some are selected, the parent checkbox will become indeterminate.
+If none are selected, the parent checkbox will be unchecked.

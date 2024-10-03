@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nested Checkboxes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .checkbox-group {
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group label {
+            font-weight: bold;
+        }
+
+        .checkbox-group .children {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Nested Checkboxes</h1>
+
+    <div class="checkbox-group">
+        <label><input type="checkbox" class="parent-checkbox"> Parent 1</label>
+        <div class="children">
+            <label><input type="checkbox" class="child-checkbox"> Child 1.1</label><br>
+            <label><input type="checkbox" class="child-checkbox"> Child 1.2</label><br>
+            <label><input type="checkbox" class="child-checkbox"> Child 1.3</label>
+        </div>
+    </div>
+
+    <div class="checkbox-group">
+        <label><input type="checkbox" class="parent-checkbox"> Parent 2</label>
+        <div class="children">
+            <label><input type="checkbox" class="child-checkbox"> Child 2.1</label><br>
+            <label><input type="checkbox" class="child-checkbox"> Child 2.2</label><br>
+            <label><input type="checkbox" class="child-checkbox"> Child 2.3</label>
+        </div>
+    </div>
+
+    <div class="checkbox-group">
+        <label><input type="checkbox" class="parent-checkbox"> Parent 3</label>
+        <div class="children">
+            <label><input type="checkbox" class="child-checkbox"> Child 3.1</label><br>
+            <label><input type="checkbox" class="child-checkbox"> Child 3.2</label><br>
+            <label><input type="checkbox" class="child-checkbox"> Child 3.3</label>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle child checkboxes based on parent checkbox
+        document.querySelectorAll('.parent-checkbox').forEach(parentCheckbox => {
+            parentCheckbox.addEventListener('change', () => {
+                const children = parentCheckbox.closest('.checkbox-group').querySelectorAll('.child-checkbox');
+                children.forEach(child => {
+                    child.checked = parentCheckbox.checked;
+                });
+            });
+        });
+
+        // Function to update parent checkbox state based on its children's state
+        document.querySelectorAll('.child-checkbox').forEach(childCheckbox => {
+            childCheckbox.addEventListener('change', () => {
+                const parentCheckbox = childCheckbox.closest('.checkbox-group').querySelector('.parent-checkbox');
+                const children = childCheckbox.closest('.checkbox-group').querySelectorAll('.child-checkbox');
+                const allChecked = [...children].every(child => child.checked);
+                const someChecked = [...children].some(child => child.checked);
+
+                // If all children are checked, the parent should be checked.
+                // If some but not all are checked, the parent should be in an indeterminate state.
+                parentCheckbox.checked = allChecked;
+                parentCheckbox.indeterminate = !allChecked && someChecked;
+            });
+        });
+    </script>
+
+</body>
+
+</html>
