@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Poll Widget</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .poll-widget {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .poll-widget h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .results {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .result-item {
+            margin-bottom: 5px;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="poll-widget">
+        <h2>Vote for Your Favorite Color</h2>
+        <form id="poll-form">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="color">Select a Color</label>
+                <select id="color" required>
+                    <option value="" disabled selected>Select a color</option>
+                    <option value="Red">Red</option>
+                    <option value="Blue">Blue</option>
+                    <option value="Green">Green</option>
+                    <option value="Yellow">Yellow</option>
+                </select>
+            </div>
+            <button type="submit">Submit Vote</button>
+        </form>
+
+        <div class="error" id="error-message"></div>
+
+        <div class="results" id="results">
+            <h3>Poll Results</h3>
+            <div class="result-item" id="red-votes">Red: 0 votes</div>
+            <div class="result-item" id="blue-votes">Blue: 0 votes</div>
+            <div class="result-item" id="green-votes">Green: 0 votes</div>
+            <div class="result-item" id="yellow-votes">Yellow: 0 votes</div>
+        </div>
+    </div>
+
+    <script>
+        const pollForm = document.getElementById('poll-form');
+        const errorMessage = document.getElementById('error-message');
+        const results = {
+            Red: 0,
+            Blue: 0,
+            Green: 0,
+            Yellow: 0,
+        };
+        const votedUsers = new Set();
+
+        // Elements to update the results
+        const redVotes = document.getElementById('red-votes');
+        const blueVotes = document.getElementById('blue-votes');
+        const greenVotes = document.getElementById('green-votes');
+        const yellowVotes = document.getElementById('yellow-votes');
+
+        // Handle form submission
+        pollForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const color = document.getElementById('color').value;
+
+            if (!name || !color) {
+                errorMessage.textContent = 'Please enter your name and select a color.';
+                return;
+            }
+
+            if (votedUsers.has(name)) {
+                errorMessage.textContent = 'You have already voted!';
+                return;
+            }
+
+            votedUsers.add(name); // Add the user to the voted list
+            results[color] += 1; // Increment the vote for the selected color
+
+            // Update the results display
+            updateResults();
+
+            // Clear form and error messages
+            pollForm.reset();
+            errorMessage.textContent = '';
+        });
+
+        // Function to update the results display
+        function updateResults() {
+            redVotes.textContent = `Red: ${results.Red} votes`;
+            blueVotes.textContent = `Blue: ${results.Blue} votes`;
+            greenVotes.textContent = `Green: ${results.Green} votes`;
+            yellowVotes.textContent = `Yellow: ${results.Yellow} votes`;
+        }
+    </script>
+
+</body>
+
+</html>
