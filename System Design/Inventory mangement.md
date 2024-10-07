@@ -124,35 +124,65 @@ Below is the **ASCII representation** of the high-level architecture for the **A
 
 ### **3. Data Model**
 
+```typescript
 The data model defines key entities related to users, products, warehouses, and stock updates. Each entity is linked to specific components and their sources:
 
-- **User Entity**:
+// Product Entity to represent items in inventory
+type Product = {
+  id: number;
+  name: string;
+  description: string;
+  sku: string;  // Stock Keeping Unit
+  price: number;
+  quantity_in_stock: number;  // Current stock level
+  reorder_level: number;  // Threshold for when stock should be reordered
+  supplier_id: number;  // Links to the supplier providing the product
+  photo_url?: string;  // Optional photo of the product
+};
 
-  - **Fields**: `user_id`, `name`, `email`, `role`, `permissions[]`, `warehouse_assigned`
-  - **Component**: Authentication Service, Client Store
-  - **Source**: OAuth, User Service API
+// Supplier Entity to represent suppliers for products
+type Supplier = {
+  id: number;
+  name: string;
+  contact_info: string;  // Phone, email, etc.
+  address: string;  // Supplier location
+};
 
-- **Product Entity**:
+// Inventory Transaction Type for tracking stock movement
+type InventoryTransaction = {
+  id: number;
+  product_id: number;
+  transaction_type: 'INCOMING' | 'OUTGOING';  // Whether stock was added or removed
+  quantity: number;  // Quantity of the product involved in the transaction
+  transaction_date: string;  // Timestamp of the transaction
+  supplier_id?: number;  // Optional, only relevant for incoming transactions
+};
 
-  - **Fields**: `product_id`, `name`, `sku`, `description`, `category`, `price`, `current_stock`, `threshold`, `warehouse_id`
-  - **Component**: Product List View, Inventory Controller
-  - **Source**: Backend Database, Inventory Service API
+// Typeahead Search Request Type for finding products or suppliers
+type SearchRequest = {
+  searchQuery: string;
+  start_from: number;
+  limit: number;
+};
 
-- **Warehouse Entity**:
+// Search Result Type with Pagination for Products and Suppliers
+type SearchResult<T extends Entity> = {
+  data: T[]; // Could be products or suppliers
+  pagination: {
+    start_from: number;
+    limit: number;
+    total: number;
+  };
+};
 
-  - **Fields**: `warehouse_id`, `name`, `location`, `capacity`, `products[]`
-  - **Component**: Warehouse Stock View, State Management
-  - **Source**: Backend Database, Inventory Service API
-
-- **Stock Update Entity**:
-  - **Fields**: `stock_update
-
-\_id`, `product_id`, `warehouse_id`, `quantity`, `update_type`(incoming, outgoing),`timestamp`
-
-- **Component**: Stock State Management, Stock Update Service
-- **Source**: Backend Database, Stock Update Service API
-
----
+// Client State for Managing Current Inventory Status
+type ClientState = {
+  searchQuery: string;
+  searchResults: SearchResult<Entity>; // Holds current search results for products/suppliers
+  recentQueries: string[];  // Cached search queries
+  inventoryTransactions: InventoryTransaction[];  // Current list of transactions
+};
+```
 
 ### **4. Interface Definition (API)**
 

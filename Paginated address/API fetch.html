@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paginated Addresses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        ul {
+            padding: 0;
+            list-style-type: none;
+        }
+
+        li {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Paginated Addresses</h1>
+    <ul id="address-list"></ul>
+
+    <div class="pagination">
+        <button id="prev-btn" disabled>Previous</button>
+        <button id="next-btn" disabled>Next</button>
+    </div>
+
+    <script>
+        const addressList = document.getElementById("address-list");
+        const prevBtn = document.getElementById("prev-btn");
+        const nextBtn = document.getElementById("next-btn");
+
+        const addressesPerPage = 5; // How many addresses to show per page
+        let currentPage = 1; // Start on the first page
+        let totalPages = 0; // Total number of pages
+        let addresses = []; // Store fetched addresses
+
+        // Function to fetch 15 addresses
+        async function fetchAddresses() {
+            try {
+                // Fetch 15 random users from the Random User API
+                const response = await fetch("https://randomuser.me/api/?results=15");
+                const data = await response.json();
+
+                // Extract addresses from the user data
+                addresses = data.results.map((user) => {
+                    const { street, city, state, postcode } = user.location;
+                    return `${street.number} ${street.name}, ${city}, ${state}, ${postcode}`;
+                });
+
+                // Calculate total pages and render the first page
+                totalPages = Math.ceil(addresses.length / addressesPerPage);
+                renderPage(currentPage);
+            } catch (error) {
+                console.error("Error fetching addresses:", error);
+            }
+        }
+
+        // Function to render a page of addresses
+        function renderPage(page) {
+            addressList.innerHTML = ""; // Clear the list
+            const start = (page - 1) * addressesPerPage;
+            const end = start + addressesPerPage;
+            const pageAddresses = addresses.slice(start, end);
+
+            // Display the addresses on the current page
+            pageAddresses.forEach((address) => {
+                const listItem = document.createElement("li");
+                listItem.textContent = address;
+                addressList.appendChild(listItem);
+            });
+
+            // Update pagination buttons
+            prevBtn.disabled = page === 1;
+            nextBtn.disabled = page === totalPages;
+        }
+
+        // Event listeners for pagination buttons
+        prevBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+            }
+        });
+
+        nextBtn.addEventListener("click", () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage);
+            }
+        });
+
+        // Fetch addresses on page load
+        fetchAddresses();
+    </script>
+</body>
+
+</html>

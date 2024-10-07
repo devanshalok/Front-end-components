@@ -128,30 +128,59 @@ Below is the **ASCII representation** of the high-level architecture for the **C
 
 The data model defines key entities related to users, chats, groups, and messages. Each entity is linked to specific components and their sources:
 
-- **User Entity**:
+```typescript
+// User Entity for Chat Application
+type User = {
+  id: number;
+  name: string;
+  profile_photo_url?: string; // User's profile picture
+  status?: string; // Online, Offline, Busy, etc.
+};
 
-  - **Fields**: `user_id`, `name`, `email`, `profile_picture`, `status`, `contacts[]`, `last_seen`
-  - **Component**: Authentication Service, Client Store
-  - **Source**: OAuth, User Service API
+// Message Entity to Represent Chat Messages
+type Message = {
+  id: number;
+  sender_id: number; // User ID of the message sender
+  recipient_id: number; // User ID of the message recipient (could be group ID for group chats)
+  content: string; // Text or media (image, video, etc.)
+  timestamp: string; // Time when the message was sent
+  is_read: boolean; // Whether the message has been read by the recipient(s)
+  media_url?: string; // If the message is an image, video, or audio
+};
 
-- **Chat Entity**:
+// Chat Entity for One-to-One or Group Conversations
+type Chat = {
+  id: number;
+  participants: User[]; // List of users in the chat (2 for one-to-one, multiple for group chats)
+  last_message: Message; // Stores the latest message for quick viewing
+};
 
-  - **Fields**: `chat_id`, `participants[]`, `last_message`, `last_seen_time`, `unread_count`
-  - **Component**: Chat List View, Conversation View, State Management
-  - **Source**: Backend Database, Chat Service API
+// Typeahead Search Request for Searching Users or Chats
+type SearchRequest = {
+  searchQuery: string;
+  start_from: number;
+  limit: number;
+};
 
-- **Message Entity**:
+// Search Result Type with Pagination for Users and Chats
+type SearchResult<T extends Entity> = {
+  data: T[]; // Could be users or chats
+  pagination: {
+    start_from: number;
+    limit: number;
+    total: number;
+  };
+};
 
-  - **Fields**: `message_id`, `chat_id`, `sender_id`, `content`, `media_url`, `timestamp`, `read_status`
-  - **Component**: Chat State Management, Chat Controller
-  - **Source**: Backend Database, Chat Service API
-
-- **Group Entity**:
-  - **Fields**: `group_id`, `group_name`, `admin_id`, `members[]`, `created_at`, `last_message`
-  - **Component**: Group Chat View, Chat Controller, State Management
-  - **Source**: Backend Database, Group Service API
-
----
+// Client State for Storing Current Chat State
+type ClientState = {
+  searchQuery: string; // Stores current search input
+  searchResults: SearchResult<Entity>; // Holds search results (users or chats)
+  currentChat?: Chat; // The current active chat (one-to-one or group)
+  chatHistory: Message[]; // Holds the history of messages for the current chat
+  recentChats: Chat[]; // List of recent chats for quick access
+};
+```
 
 ### **4. Interface Definition (API)**
 

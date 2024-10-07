@@ -126,38 +126,84 @@ Below is the **ASCII representation** of the high-level architecture for the **F
 
 The data model defines key entities related to users, posts, comments, likes, and media. Each entity is linked to specific components and their sources:
 
-- **User Entity**:
+```typescript
+// User Entity to Represent Social Media User
+type User = {
+  id: number;
+  username: string;
+  name: string;
+  profile_photo_url?: string;
+  bio?: string;
+  followers_count: number;
+  following_count: number;
+};
 
-  - **Fields**: `user_id`, `name`, `email`, `profile_picture`, `bio`, `friends[]`, `posts[]`
-  - **Component**: Authentication Service, Client Store
-  - **Source**: OAuth, User Service API
+// Post Entity to Represent User Posts
+type Post = {
+  id: number;
+  author: User; // The user who created the post
+  content: string; // The text or description of the post
+  media_url?: string; // URL to an image, video, or other media
+  created_at: string; // ISO timestamp of post creation
+  like_count: number; // Number of likes on the post
+  comment_count: number; // Number of comments on the post
+};
 
-- **Post Entity**:
+// Comment Entity to Represent Comments on Posts
+type Comment = {
+  id: number;
+  author: User; // The user who made the comment
+  post_id: number; // The post that the comment is linked to
+  content: string; // The comment text
+  created_at: string; // ISO timestamp of comment creation
+  like_count: number; // Number of likes on the comment
+};
 
-  - **Fields**: `post_id`, `user_id`, `content`, `media_url`, `likes[]`, `comments[]`, `created_at`, `privacy`
-  - **Component**: News Feed View, Post Composer, Social Feed Controller
-  - **Source**: Backend Database, Post Service API
+// Like Entity to Track Likes on Posts or Comments
+type Like = {
+  id: number;
+  user: User; // The user who liked the post or comment
+  post_id?: number; // The post that was liked (if applicable)
+  comment_id?: number; // The comment that was liked (if applicable)
+  created_at: string; // ISO timestamp of when the like happened
+};
 
-- **Comment Entity**:
+// Typeahead Search Request Type (for searching users or posts)
+type SearchRequest = {
+  searchQuery: string;
+  start_from: number;
+  limit: number;
+};
 
-  - **Fields**: `comment_id`, `post_id`, `user_id`, `content`, `created_at`
-  - **Component**: Post State Management, Post View
-  - **Source**: Backend Database, Post Service API
+// Search Result Type with Pagination for Users and Posts
+type SearchResult<T extends Entity> = {
+  data: T[]; // Could be users or posts
+  pagination: {
+    start_from: number;
+    limit: number;
+    total: number;
+  };
+};
 
-- \*\*Like
+// Client State for Storing Current User Session and Search State
+type ClientState = {
+  currentUser: User; // Holds the current logged-in user data
+  searchQuery: string; // The current search query for users or posts
+  searchResults: SearchResult<Entity>; // Holds current search results (users, posts)
+  feed: Post[]; // The user's main feed showing recent posts from followed users
+  notifications: Notification[]; // Holds notifications (likes, follows, comments, etc.)
+};
 
-Entity\*\*:
-
-- **Fields**: `like_id`, `post_id`, `user_id`
-- **Component**: Post State Management, Post View
-- **Source**: Backend Database, Post Service API
-
-- **Media Entity**:
-  - **Fields**: `media_id`, `post_id`, `user_id`, `file_url`, `file_type`, `created_at`
-  - **Component**: Media Upload, Post State Management
-  - **Source**: Backend Database, Media Service API
-
----
+// Notification Entity to Represent Various Actions
+type Notification = {
+  id: number;
+  user: User; // The user who performed the action (e.g., liked, commented)
+  action: "like" | "comment" | "follow"; // Type of action
+  target_post_id?: number; // The post linked to the action (if applicable)
+  target_comment_id?: number; // The comment linked to the action (if applicable)
+  created_at: string; // ISO timestamp of when the notification was created
+};
+```
 
 ### **4. Interface Definition (API)**
 

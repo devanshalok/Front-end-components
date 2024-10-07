@@ -125,30 +125,62 @@ Below is the **ASCII representation** of the high-level architecture for the **A
 
 The data model defines key entities related to users, lockers, orders, and access codes. Each entity is linked to specific components and their sources:
 
-- **User Entity**:
+```typescript
+// Locker Entity to Represent a Physical Locker
+type Locker = {
+  id: number;
+  location: string; // Address or description of the locker location
+  available_slots: number; // Number of available slots for packages
+  total_slots: number; // Total capacity of the locker
+  operational_status: string; // e.g., "operational", "out_of_service"
+};
 
-  - **Fields**: `user_id`, `name`, `email`, `phone_number`, `address`, `saved_lockers[]`, `orders[]`
-  - **Component**: Authentication Service, Client Store
-  - **Source**: OAuth, User Service API
+// Package Entity for Each Delivered Item
+type Package = {
+  id: number;
+  locker_id: number; // ID of the locker storing this package
+  user_id: number; // ID of the user who owns this package
+  delivery_code: string; // Unique code for user to access the package
+  status: string; // e.g., "awaiting_pickup", "picked_up", "returned"
+  delivery_time: Date; // Timestamp when the package was delivered to the locker
+  pickup_deadline: Date; // Deadline by which the package must be picked up
+};
 
-- **Locker Entity**:
+// User Entity for Locker System Users
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  phone_number?: string; // Optional, for SMS notifications
+  preferred_lockers?: number[]; // Array of locker IDs the user frequently uses
+};
 
-  - **Fields**: `locker_id`, `location`, `availability`, `locker_code`, `qr_code`, `status`
-  - **Component**: Locker Search, Locker Controller, State Management
-  - **Source**: Backend Database, Locker Service API
+// Typeahead Search Request Type (for searching nearby lockers)
+type SearchRequest = {
+  searchQuery: string;
+  start_from: number;
+  limit: number;
+};
 
-- **Order Entity**:
+// Search Result Type with Pagination for Lockers
+type SearchResult<T extends Entity> = {
+  data: T[]; // List of lockers
+  pagination: {
+    start_from: number;
+    limit: number;
+    total: number;
+  };
+};
 
-  - **Fields**: `order_id`, `user_id`, `locker_id`, `status`, `delivery_time`, `locker_access_code`
-  - **Component**: Order Tracking, Locker Controller, State Management
-  - **Source**: Backend Database, Order Service API
-
-- **Access Code Entity**:
-  - **Fields**: `access_code_id`, `locker_id`, `code`, `qr_code`, `expiration_time`
-  - **Component**: Locker Controller, UI Components
-  - **Source**: Backend Database, Locker Service API
-
----
+// Client State for Storing Current Locker and Package State
+type ClientState = {
+  searchQuery: string;
+  searchResults: SearchResult<Locker>; // Holds the current locker search results
+  recentQueries: string[]; // Cached locker search queries
+  currentPackage?: Package; // Current package status if tracking an order
+  preferredLockers: Locker[]; // List of user’s preferred lockers for easy access
+};
+```
 
 ### **4. Interface Definition (API)**
 

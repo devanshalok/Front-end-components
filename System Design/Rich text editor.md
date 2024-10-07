@@ -115,22 +115,76 @@ Below is an **ASCII representation** of the high-level architecture for the rich
 
 The data model is structured around key entities that represent the rich text editor's functionality, with details on which components each entity belongs to:
 
-- **User Entity**:
+```typescript
+// Text Formatting Type for styling text (e.g., bold, italic, underline, etc.)
+type TextFormatting = {
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  strikethrough?: boolean;
+  font_size?: number; // Font size in pixels
+  font_family?: string; // Font family (e.g., Arial, Times New Roman)
+  color?: string; // Text color (e.g., #000000 for black)
+  background_color?: string; // Background color (e.g., #FFFFFF for white)
+  link?: string; // Hyperlink URL if text contains a link
+};
 
-  - **Fields**: `user_id`, `username`, `email`, `profile_picture`, `permissions`
-  - **Component**: Authentication Service, Client Store
-  - **Source**: Backend Database, Authentication API
+// Block Entity to Represent Different Types of Content (e.g., text, image, video)
+type Block = {
+  id: string;
+  type:
+    | "paragraph"
+    | "heading"
+    | "list"
+    | "image"
+    | "video"
+    | "code"
+    | "quote"
+    | "table";
+  content?: string; // Raw text content for text-based blocks
+  formatting?: TextFormatting; // Formatting options for text
+  src_url?: string; // For media content like images, videos
+  alt_text?: string; // For media content (alternative text for images)
+  list_items?: ListItem[]; // For list type blocks (ordered or unordered)
+  table_data?: TableRow[]; // For table type blocks
+};
 
-- **Document Entity**:
+// List Item Entity for Ordered/Unordered Lists
+type ListItem = {
+  content: string;
+  formatting?: TextFormatting; // Formatting options for list item text
+};
 
-  - **Fields**: `document_id`, `title`, `content`, `created_at`, `updated_at`, `owner_id`
-  - **Component**: Document Storage, API Integration Layer
-  - **Source**: Backend Database, Document Service API
+// Table Row Entity to Represent Rows in a Table Block
+type TableRow = {
+  cells: TableCell[]; // Array of table cells in this row
+};
 
-- **Formatting Entity**:
-  - **Fields**: `format_id`, `document_id`, `range_start`, `range_end`, `format_type` (e.g., bold, italic, underline)
-  - **Component**: Formatting State, Controller
-  - **Source**: Client-side memory, stored for undo/redo actions
+// Table Cell Entity to Represent Individual Table Cells
+type TableCell = {
+  content: string; // Cell content (could be plain text or formatted text)
+  formatting?: TextFormatting; // Formatting options for table cell content
+};
+
+// Rich Text Document Type to Represent the Entire Document
+type RichTextDocument = {
+  id: string;
+  title: string; // Title of the document (optional)
+  blocks: Block[]; // Array of blocks that make up the content
+  created_at: Date; // Timestamp when the document was created
+  updated_at: Date; // Timestamp when the document was last updated
+  author_id?: string; // Optional author reference if user-generated
+  collaborators?: string[]; // List of user IDs with access to the document
+};
+
+// User Entity for User Management (optional)
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  profile_photo_url?: string; // User's profile picture
+};
+```
 
 ### **4. Interface Definition (API)**
 

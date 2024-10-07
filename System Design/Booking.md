@@ -113,28 +113,70 @@ Here is the high-level architecture, represented using an ASCII diagram, along w
 
 Below is the data model, with each entity connected to its relevant components and source:
 
-- **User Entity**:
+```typescript
+// Hotel Entity representing a hotel available for booking
+type Hotel = {
+  id: number;
+  name: string;
+  location: string;
+  rating: number; // Average user rating for the hotel
+  photo_url?: string; // Image of the hotel
+  amenities: string[]; // List of amenities available (e.g., "WiFi", "Pool")
+};
 
-  - **Fields**: `user_id`, `name`, `email`, `password_hash`, `profile_picture`, `bio`, `phone_number`
-  - **Component**: Authentication Service, Client Store
-  - **Source**: Backend Database, User API
+// Room Entity representing a room within a hotel
+type Room = {
+  id: number;
+  hotel_id: number; // Foreign key linking to the hotel
+  name: string; // Name or type of the room (e.g., "Deluxe King Suite")
+  description: string; // Room description (e.g., "Sea view, king-sized bed")
+  price_per_night: number; // Cost per night for the room
+  max_guests: number; // Maximum number of guests
+  photo_url?: string; // Image of the room
+};
 
-- **Property Entity**:
+// Booking Entity representing a hotel room booking
+type Booking = {
+  id: number;
+  hotel_id: number; // Foreign key linking to the hotel
+  room_id: number; // Foreign key linking to the room
+  user_id: number; // Foreign key linking to the user
+  check_in_date: string; // ISO date for check-in (e.g., "2024-10-15")
+  check_out_date: string; // ISO date for check-out (e.g., "2024-10-18")
+  total_price: number; // Total price for the stay
+  guests: number; // Number of guests
+};
 
-  - **Fields**: `property_id`, `name`, `description`, `location`, `price`, `images`, `amenities`, `availability_dates`
-  - **Component**: Property List View, Property Detail View, API Integration Layer
-  - **Source**: Backend Database, Property Service API
+// Typeahead Search Request for hotels
+type SearchRequest = {
+  searchQuery: string; // The location, hotel name, or keyword the user is searching for
+  check_in_date: string; // Desired check-in date
+  check_out_date: string; // Desired check-out date
+  guests: number; // Number of guests
+  start_from: number; // For pagination, starting point for results
+  limit: number; // Number of results to return
+};
 
-- **Booking Entity**:
+// Search Result Type with Pagination for Hotels and Rooms
+type SearchResult<T extends Entity> = {
+  data: T[]; // Could be a list of hotels or available rooms
+  pagination: {
+    start_from: number;
+    limit: number;
+    total: number; // Total number of results for this query
+  };
+};
 
-  - **Fields**: `booking_id`, `user_id`, `property_id`, `check_in`, `check_out`, `total_price`, `payment_status`
-  - **Component**: Booking Service, Client Store
-  - **Source**: Backend Database, Booking Service API
-
-- **Review Entity**:
-  - **Fields**: `review_id`, `property_id`, `user_id`, `rating`, `review_text`, `timestamp`
-  - **Component**: Property Detail View, Reviews Section
-  - **Source**: Backend Database, Review Service API
+// Client State for Storing Current Search and Booking State
+type ClientState = {
+  searchQuery: string;
+  searchResults: SearchResult<Entity>; // Holds current search results (hotels or rooms)
+  recentQueries: string[]; // Cached search queries
+  selectedHotel?: Hotel; // Hotel selected for booking
+  selectedRoom?: Room; // Room selected for booking
+  currentBooking?: Booking; // Holds the current booking information (if in progress)
+};
+```
 
 ### **4. Interface Definition (API)**
 

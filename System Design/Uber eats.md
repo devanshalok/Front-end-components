@@ -115,28 +115,55 @@ Here is the **ASCII diagram** of the high-level architecture for Uber Eats' fron
 
 Here is the data model, with components and their sources specified:
 
-- **User Entity**:
+```typescript
+// Restaurant Entity for Restaurant Search
+type Restaurant = {
+  id: number;
+  name: string;
+  photo_url?: string; // Image of restaurant
+  cuisine: string;
+  rating: number;
+  delivery_time_estimate: string; // e.g., "30-45 min"
+};
 
-  - **Fields**: `user_id`, `name`, `email`, `password_hash`, `address`, `phone_number`
-  - **Component**: Authentication Service, Client Store
-  - **Source**: Backend Database, User API
+// Menu Item Entity for Menu Search
+type MenuItem = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  photo_url?: string;
+};
 
-- **Restaurant Entity**:
+// Typeahead Search Request Type (for searching restaurants or menu items)
+type SearchRequest = {
+  searchQuery: string;
+  start_from: number;
+  limit: number;
+};
 
-  - **Fields**: `restaurant_id`, `name`, `location`, `cuisine_type`, `rating`, `menu`
-  - **Component**: Restaurant List View, API Integration Layer
-  - **Source**: Backend Database, Restaurant Service API
+// Search Result Type with Pagination for Restaurants and Menu Items
+type SearchResult<T extends Entity> = {
+  data: T[]; // Could be restaurants or menu items
+  pagination: {
+    start_from: number;
+    limit: number;
+    total: number;
+  };
+};
 
-- **Menu Item Entity**:
-
-  - **Fields**: `item_id`, `restaurant_id`, `name`, `description`, `price`, `availability`
-  - **Component**: Menu Detail View, UI Components
-  - **Source**: Backend Database, Restaurant Service API
-
-- **Order Entity**:
-  - **Fields**: `order_id`, `user_id`, `restaurant_id`, `order_items`, `total_price`, `delivery_status`, `payment_status`
-  - **Component**: Order Service, Client Store
-  - **Source**: Backend Database, Order Service API
+// Client State for Storing Current Search and Order State
+type ClientState = {
+  searchQuery: string;
+  searchResults: SearchResult<Entity>; // Holds current search results
+  recentQueries: string[]; // Cached search queries
+  cart: {
+    items: MenuItem[];
+    total_price: number;
+  };
+  currentOrderStatus?: string; // e.g., "Preparing", "Out for Delivery", etc.
+};
+```
 
 ### **4. Interface Definition (API)**
 

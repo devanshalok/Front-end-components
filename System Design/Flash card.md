@@ -124,30 +124,56 @@ Below is the **ASCII representation** of the high-level architecture for the **F
 
 The data model defines key entities related to users, flashcards, and progress. Each entity is linked to specific components and their sources:
 
-- **User Entity**:
+```typescript
+// Generic Entity to Represent a Flashcard
+type Flashcard = {
+  id: number;
+  front: string; // The front of the card (e.g., word in foreign language)
+  back: string; // The back of the card (e.g., translation or meaning)
+  language: string; // Language of the card (e.g., "Spanish", "French")
+  category?: string; // Optional category (e.g., "Verbs", "Nouns")
+  image_url?: string; // Optional image for visual context (e.g., for nouns)
+  audio_url?: string; // Optional audio pronunciation
+};
 
-  - **Fields**: `user_id`, `name`, `email`, `profile_picture`, `language_preferences`, `decks[]`
-  - **Component**: Authentication Service, Client Store
-  - **Source**: OAuth, User Service API
+// Typeahead Search Request Type (for searching flashcards)
+type SearchRequest = {
+  searchQuery: string;
+  start_from: number;
+  limit: number;
+};
 
-- **Flashcard Entity**:
+// Search Result Type with Pagination for Flashcards
+type SearchResult<T extends Entity> = {
+  data: T[]; // Array of flashcards matching the search
+  pagination: {
+    start_from: number;
+    limit: number;
+    total: number;
+  };
+};
 
-  - **Fields**: `card_id`, `deck_id`, `front_text`, `back_text`, `flipped_status`, `created_at`
-  - **Component**: Flashcard Detail, Flashcard Grid, State Management
-  - **Source**: Backend Database, Flashcard Decks Service
+// User Progress Data for Tracking Learning Progress
+type UserProgress = {
+  flashcard_id: number;
+  user_id: number;
+  times_viewed: number; // How many times the card was seen
+  times_correct: number; // How many times the user answered correctly
+  last_reviewed: Date; // Last time the card was reviewed
+  next_review_due: Date; // Next review session scheduled for this card
+  proficiency_score: number; // Score between 0 and 1 indicating proficiency with this card
+};
 
-- **Deck Entity**:
-
-  - **Fields**: `deck_id`, `user_id`, `language_pair` (e.g., English-Spanish), `name`, `cards[]`, `created_at`
-  - **Component**: Deck Selection, API Integration Layer
-  - **Source**: Backend Database, Deck Service API
-
-- **Progress Entity**:
-  - **Fields**: `progress_id`, `user_id`, `deck_id`, `cards_reviewed`, `cards_mastered`, `last_reviewed`
-  - **Component**: Learning State Management, Flashcard Controller
-  - **Source**: Backend Database, Progress Tracking Service
-
----
+// Client State for Managing Flashcard Learning Session
+type ClientState = {
+  currentLanguage: string; // The currently selected language (e.g., "Spanish")
+  currentCategory?: string; // The currently selected category (e.g., "Verbs")
+  flashcards: Flashcard[]; // Flashcards in the current session
+  currentCardIndex: number; // Index of the current flashcard in the session
+  recentSearches: string[]; // Cached search queries
+  userProgress: UserProgress[]; // User's progress for the current session's flashcards
+};
+```
 
 ### **4. Interface Definition (API)**
 

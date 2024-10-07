@@ -127,27 +127,73 @@ Below is the **ASCII representation** of the high-level architecture for the **v
 
 The data model defines key entities related to users, meetings, and chat messages. Each entity is linked to specific components and sources:
 
-- **User Entity**:
+```typescript
+// Entity to Represent a Participant in a Conference
+type Participant = {
+  id: number;
+  name: string;
+  photo_url?: string; // Profile picture of the participant
+  email: string;
+  role: "host" | "participant" | "guest"; // Role of the participant in the conference
+  is_muted: boolean; // Whether the participant's audio is muted
+  is_video_enabled: boolean; // Whether the participant's video is enabled
+};
 
-  - **Fields**: `user_id`, `name`, `email`, `profile_picture`, `role` (host, participant), `is_muted`, `is_video_on`
-  - **Component**: Authentication Service, Client Store
-  - **Source**: OAuth, User Service API
+// Entity to Represent a Video Conference Room
+type ConferenceRoom = {
+  id: number;
+  name: string;
+  host_id: number; // Reference to the host participant
+  start_time: Date;
+  end_time?: Date; // The conference may be ongoing or ended
+  participants: Participant[];
+};
 
-- **Meeting Entity**:
+// Entity to Represent a Message in the Chat Feature
+type Message = {
+  id: number;
+  sender_id: number; // Reference to the participant sending the message
+  conference_room_id: number; // The room where the message is sent
+  content: string; // Message content (text, links)
+  timestamp: Date;
+};
 
-  - **Fields**: `meeting_id`, `host_id`, `meeting_link`, `start_time`, `end_time`, `participants[]`
-  - **Component**: Video Grid View, API Integration Layer, State Management
-  - **Source**: Backend Database, Meeting Service API
+// Entity to Represent a Video Stream (for each participant's stream)
+type VideoStream = {
+  id: number;
+  participant_id: number; // The participant associated with this stream
+  conference_room_id: number; // The conference room where the stream is active
+  stream_url: string; // URL or identifier for accessing the video stream
+  is_active: boolean; // Whether the stream is currently active
+};
 
-- **Chat Message Entity**:
+// Typeahead Search Request Type (for searching participants, rooms, or messages)
+type SearchRequest = {
+  searchQuery: string;
+  start_from: number;
+  limit: number;
+};
 
-  - **Fields**: `message_id`, `meeting_id`, `sender_id`, `message_text`, `timestamp`
-  - **Component**: Chat Window, State Management
-  - **Source**: Backend Database, Chat Service API
+// Search Result Type with Pagination for Conference Rooms, Participants, or Messages
+type SearchResult<T extends Entity> = {
+  data: T[]; // Could be conference rooms, participants, or messages
+  pagination: {
+    start_from: number;
+    limit: number;
+    total: number;
+  };
+};
 
-- **Stream Entity**:
-  - **Fields**: `stream_id`, `user_id`, `video_url`, `audio_url`, `is_muted`, `is_video_on`
-  - **Component**: Stream State Management, Video Grid
+// Client State for Storing Current Conference State
+type ClientState = {
+  currentRoom?: ConferenceRoom; // The active conference room the user is participating in
+  searchQuery: string; // Current search query for finding rooms, participants, or messages
+  searchResults: SearchResult<Entity>; // Holds the search results
+  recentRooms: ConferenceRoom[]; // Cached list of recent rooms the user has joined
+  activeParticipants: Participant[]; // List of active participants in the current room
+  messages: Message[]; // Chat messages for the current room
+};
+```
 
 View
 

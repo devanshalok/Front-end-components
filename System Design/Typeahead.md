@@ -127,24 +127,64 @@ Below is the **ASCII representation** of the high-level architecture for the **T
 
 The data model defines key entities related to user input, suggestions, and query results. Each entity is linked to specific components and their sources:
 
-- **User Entity** (optional, if personalized suggestions are required):
+```typescript
+// Generic Entity for Typeahead Suggestions
+type Entity = {
+  id: number;
+  name: string;
+  photo_url?: string; // For items like products, people, etc.
+  poster_url?: string; // For media items like movies or TV shows
+};
 
-  - **Fields**: `user_id`, `name`, `email`, `preferences`, `recent_queries[]`
-  - **Component**: Authentication Service, Client Store
-  - **Source**: OAuth, User Service API
+// Typeahead Search Request Type
+type SearchRequest = {
+  searchQuery: string; // Partial input from the user
+  start_from: number; // Pagination offset for search results
+  limit: number; // Limit on the number of results to return
+};
 
-- **Query Entity**:
+// Search Result Type with Pagination
+type SearchResult<T extends Entity> = {
+  data: T[]; // Could be persons, products, movies, or any searchable entity
+  pagination: {
+    start_from: number;
+    limit: number;
+    total: number; // Total number of matching results in the database
+  };
+};
 
-  - **Fields**: `query_id`, `query_text`, `suggestions[]`, `timestamp`
-  - **Component**: Typeahead Controller, Suggestion State Management
-  - **Source**: Backend Database, Search Service API
+// Client State for Managing Typeahead Search State
+type ClientState = {
+  searchQuery: string; // Stores the current search query
+  searchResults: SearchResult<Entity>; // Holds current results from the typeahead search
+  recentQueries: string[]; // List of cached previous search queries
+};
 
-- **Suggestion Entity**:
-  - **Fields**: `suggestion_id`, `query_id`, `suggestion_text`, `match_highlight[]`, `rank`
-  - **Component**: Suggestion State Management, API Integration Layer
-  - **Source**: Backend Database, Search Service API
+// Example Entity for Person Typeahead Suggestions
+type Person = Entity & {
+  id: number;
+  name: string;
+  photo_url: string;
+  occupation?: string; // Example for job title or role (optional)
+};
 
----
+// Example Entity for Product Typeahead Suggestions
+type Product = Entity & {
+  id: number;
+  name: string;
+  photo_url: string;
+  price: number;
+  in_stock: boolean;
+};
+
+// Example Entity for Movie Typeahead Suggestions
+type Movie = Entity & {
+  id: number;
+  name: string;
+  poster_url: string;
+  release_year: number;
+};
+```
 
 ### **4. Interface Definition (API)**
 

@@ -124,30 +124,94 @@ Below is the **ASCII representation** of the high-level architecture for the e-c
 
 Below is the data model, specifying which components each entity belongs to and their sources:
 
-- **User Entity**:
+```typescript
+// Entity to Represent Products in the E-commerce System
+type Product = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  category: string;
+  photo_url?: string; // Optional field for product images
+  rating: number; // Average rating from user reviews
+  reviews_count: number; // Total number of reviews
+};
 
-  - **Fields**: `user_id`, `username`, `email`, `password_hash`, `address`, `payment_info`, `role` (admin, customer)
-  - **Component**: Authentication Service, Client Store
-  - **Source**: Backend Database, Authentication API
+// Entity to Represent Users in the System
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string;
+  address: string;
+  payment_methods: PaymentMethod[]; // Stored payment methods for the user
+  cart: Cart; // User's current cart
+  order_history: Order[]; // User's past orders
+};
 
-- **Product Entity**:
+// Entity to Represent Cart Items
+type CartItem = {
+  product: Product;
+  quantity: number;
+};
 
-  - **Fields**: `product_id`, `name`, `description`, `price`, `stock`, `category`, `images`, `ratings`, `reviews`
-  - **Component**: Product List View, Product Detail View, API Integration Layer
-  - **Source**: Backend Database, Product Service API
+// Cart Entity to Represent User's Shopping Cart
+type Cart = {
+  items: CartItem[];
+  total_items: number; // Total number of items in the cart
+  total_price: number; // Total price of the items in the cart
+};
 
-- **Cart Entity**:
+// Entity to Represent Payment Method
+type PaymentMethod = {
+  id: number;
+  type: "CreditCard" | "PayPal" | "BankTransfer";
+  card_number?: string; // For credit card payments
+  paypal_id?: string; // For PayPal
+  bank_account?: string; // For Bank Transfer
+  expiry_date?: string; // For Credit Card expiry date
+};
 
-  - **Fields**: `cart_id`, `user_id`, `product_id`, `quantity`, `price`, `total_amount`
-  - **Component**: Cart State Management, Checkout
-  - **Source**: Local Storage (for session-based cart), Backend Database, Cart API
+// Entity to Represent Orders
+type Order = {
+  id: number;
+  user: User; // The user who placed the order
+  items: CartItem[]; // The list of products ordered
+  total_price: number; // The total price for the order
+  shipping_address: string; // Shipping address
+  payment_method: PaymentMethod; // Payment method used
+  status: "Pending" | "Shipped" | "Delivered" | "Cancelled"; // Current status of the order
+  order_date: string; // Date when the order was placed
+  delivery_date?: string; // Expected or actual delivery date
+};
 
-- **Order Entity**:
-  - **Fields**: `order_id`, `user_id`, `product_ids[]`, `total_amount`, `payment_status`, `order_status`
-  - **Component**: Checkout, API Integration Layer
-  - **Source**: Backend Database, Order Service API
+// Typeahead Search Request Type (for searching products by name or category)
+type SearchRequest = {
+  searchQuery: string;
+  start_from: number;
+  limit: number;
+};
 
----
+// Search Result Type with Pagination for Products
+type SearchResult<T extends Entity> = {
+  data: T[]; // Array of products matching the search query
+  pagination: {
+    start_from: number;
+    limit: number;
+    total: number;
+  };
+};
+
+// Client State to Store Current User and Cart State
+type ClientState = {
+  currentUser: User; // Stores details about the logged-in user
+  searchQuery: string; // Current search query
+  searchResults: SearchResult<Product>; // Search results for products
+  cart: Cart; // User's current cart
+  recentViewedProducts: Product[]; // Products recently viewed by the user
+};
+```
 
 ### **4. Interface Definition (API)**
 

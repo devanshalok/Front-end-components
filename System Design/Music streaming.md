@@ -129,32 +129,87 @@ Below is the **ASCII representation** of the high-level architecture for the **M
 
 The data model defines key entities related to users, music, and playlists. Each entity is linked to specific components and sources:
 
-- **User Entity**:
+```typescript
+// Generic Entity to Represent Searchable Music Data (Songs, Artists, Albums)
+type Entity = {
+  id: number;
+  name: string;
+  photo_url?: string; // For artist photos, album cover, etc.
+};
 
-  - **Fields**: `user_id`, `name`, `email`, `profile_picture`, `playlists[]`, `favorites[]`, `recently_played[]`
-  - **Component**: Authentication Service, Client Store
-  - **Source**: OAuth, User Service API
+// Song Entity representing individual songs
+type Song = Entity & {
+  duration: number; // in seconds
+  album_id: number;
+  artist_id: number;
+  genre: string;
+  release_date: string; // Format: YYYY-MM-DD
+  play_count: number; // Number of times the song has been played
+  lyrics?: string; // Optional field for song lyrics
+};
 
-- **Song Entity**:
+// Artist Entity representing individual artists
+type Artist = Entity & {
+  bio?: string; // Short biography of the artist
+  genre: string;
+  total_albums: number; // Number of albums by the artist
+  total_songs: number; // Number of songs by the artist
+};
 
-  - **Fields**: `song_id`, `title`, `artist`, `album`, `duration`, `file_url`, `album_art`, `lyrics`, `metadata`
-  - **Component**: Music Player View, API Integration Layer, Search, Playback Queue
-  - **Source**: Music Catalog Service, Streaming Service
+// Album Entity representing an album
+type Album = Entity & {
+  artist_id: number;
+  release_date: string; // Format: YYYY-MM-DD
+  total_tracks: number;
+  genre: string;
+};
 
-- **Playlist Entity**:
+// Playlist Entity representing user-created playlists
+type Playlist = Entity & {
+  user_id: number;
+  songs: Song[]; // List of songs in the playlist
+  total_duration: number; // Total duration of all songs in seconds
+};
 
-  - **Fields**: `playlist_id`, `user_id`, `name`, `description`, `songs[]`, `created_at`, `updated_at`
-  - **Component**: Playlist View, API Integration Layer
-  - **Source**: Backend Database, Playlist Service API
+// User Entity for music streaming service
+type User = {
+  id: number;
+  username: string;
+  email: string;
+  photo_url?: string; // Optional profile picture
+  liked_songs: Song[]; // Songs that the user has liked
+  playlists: Playlist[]; // User's custom playlists
+  play_history: Song[]; // List of recently played songs
+};
 
-- **Playback Queue Entity**:
-  - **Fields**: `queue_id`, `user_id`, `songs[]`, `current_song_id`, `playback_position`, `shuffle_mode`, `loop_mode`
-  - **Component**: Playback State Management, Player Controller
-  - **Source**: Client-side memory, Backend API for
+// Typeahead Search Request Type for searching songs, artists, and albums
+type SearchRequest = {
+  searchQuery: string;
+  start_from: number;
+  limit: number;
+};
 
-saving queues
+// Search Result Type with Pagination for Songs, Artists, and Albums
+type SearchResult<T extends Entity> = {
+  data: T[]; // Could be songs, artists, or albums
+  pagination: {
+    start_from: number;
+    limit: number;
+    total: number;
+  };
+};
 
----
+// Client State for Storing Current Search and Music Playback State
+type ClientState = {
+  searchQuery: string;
+  searchResults: SearchResult<Entity>; // Holds current search results
+  recentQueries: string[]; // Cached search queries
+  currentSong?: Song; // Song currently being played
+  currentPlaylist?: Playlist; // Playlist currently being played
+  isPlaying: boolean; // Whether music is currently playing
+  playbackPosition: number; // Current playback position in seconds
+};
+```
 
 ### **4. Interface Definition (API)**
 

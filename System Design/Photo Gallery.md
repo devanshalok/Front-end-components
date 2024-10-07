@@ -124,30 +124,38 @@ Below is an **ASCII representation** of the high-level architecture for the **Ph
 
 The data model defines key entities related to photos, albums, and tags. Each entity is linked to specific components, with sources indicated:
 
-- **User Entity**:
+// Generic Entity to Represent a Photo
+type Photo = {
+id: number;
+title: string;
+description?: string;
+url: string; // URL to the actual image file
+thumbnail_url?: string; // URL to a smaller version for preview
+uploaded_by: User; // The user who uploaded the photo
+tags?: string[]; // Tags associated with the photo
+created_at: Date; // Date and time when the photo was uploaded
+updated_at?: Date; // Date and time when the photo was last updated
+};
 
-  - **Fields**: `user_id`, `name`, `email`, `profile_picture`, `storage_usage`, `role` (admin, standard)
-  - **Component**: Authentication Service, Client Store
-  - **Source**: Backend Database, User Service API
+// Entity to Represent User
+type User = {
+id: number;
+name: string;
+email: string;
+profile_photo_url?: string; // URL to the user's profile photo
+};
 
-- **Photo Entity**:
-
-  - **Fields**: `photo_id`, `user_id`, `album_id`, `url`, `date_uploaded`, `tags`, `metadata` (location, device, etc.)
-  - **Component**: Photo Grid View, API Integration Layer, Albums, Search
-  - **Source**: Media Service API, AI Recognition API
-
-- **Album Entity**:
-
-  - **Fields**: `album_id`, `user_id`, `name`, `description`, `cover_photo_id`, `date_created`, `photo_ids[]`
-  - **Component**: Albums View, API Integration Layer
-  - **Source**: Media Service API
-
-- **Tag Entity**:
-  - **Fields**: `tag_id`, `photo_id`, `tag_name`, `confidence_score` (for AI tags)
-  - **Component**: Search, Tag Management
-  - **Source**: AI Recognition Service API
-
----
+// Entity to Represent an Album (Collection of Photos)
+type Album = {
+id: number;
+title: string;
+description?: string;
+cover_photo_url?: string; // URL to the album cover photo
+photos: Photo[]; // List of photos within the album
+created_by: User; // The user who created the album
+created_at: Date; // Date and time when the album was created
+updated_at?: Date; // Date and time when the album was last updated
+};
 
 ### **4. Interface Definition (API)**
 

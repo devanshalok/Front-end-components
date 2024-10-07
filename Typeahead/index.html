@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Typeahead Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .search-container {
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .suggestions li {
+            padding: 10px;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        .suggestions li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .no-results {
+            padding: 10px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Start typing..." />
+        <ul class="suggestions" id="suggestions-list"></ul>
+    </div>
+
+    <script>
+        // Sample data array for suggestions
+        const data = [
+            "Apple",
+            "Banana",
+            "Cherry",
+            "Date",
+            "Elderberry",
+            "Fig",
+            "Grape",
+            "Honeydew",
+            "Kiwi",
+            "Lemon",
+            "Mango",
+            "Nectarine",
+            "Orange",
+            "Papaya",
+            "Quince",
+            "Raspberry",
+            "Strawberry",
+            "Tomato",
+            "Ugli fruit",
+            "Vanilla",
+            "Watermelon",
+        ];
+
+        const searchInput = document.getElementById("search-input");
+        const suggestionsList = document.getElementById("suggestions-list");
+
+        // Function to filter and display suggestions
+        function showSuggestions(query) {
+            // Clear the previous suggestions
+            suggestionsList.innerHTML = "";
+
+            // Filter the data array based on the input query (case-insensitive)
+            const filteredData = data.filter((item) =>
+                item.toLowerCase().includes(query.toLowerCase())
+            );
+
+            // If there are no results, show a "No results" message
+            if (filteredData.length === 0) {
+                const noResultsItem = document.createElement("li");
+                noResultsItem.classList.add("no-results");
+                noResultsItem.textContent = "No results found";
+                suggestionsList.appendChild(noResultsItem);
+                return;
+            }
+
+            // Display the filtered suggestions
+            filteredData.forEach((item) => {
+                const listItem = document.createElement("li");
+                listItem.textContent = item;
+                suggestionsList.appendChild(listItem);
+
+                // Add a click event to fill the input when a suggestion is clicked
+                listItem.addEventListener("click", () => {
+                    searchInput.value = item;
+                    suggestionsList.innerHTML = ""; // Clear suggestions after selection
+                });
+            });
+        }
+
+        // Event listener for input changes
+        searchInput.addEventListener("input", () => {
+            const query = searchInput.value.trim();
+
+            // Only show suggestions if there is a query
+            if (query.length > 0) {
+                showSuggestions(query);
+            } else {
+                suggestionsList.innerHTML = ""; // Clear suggestions if input is empty
+            }
+        });
+
+        // Hide suggestions when clicking outside the input field
+        document.addEventListener("click", (event) => {
+            if (
+                !document.querySelector(".search-container").contains(event.target)
+            ) {
+                suggestionsList.innerHTML = ""; // Clear suggestions
+            }
+        });
+    </script>
+</body>
+
+</html>
