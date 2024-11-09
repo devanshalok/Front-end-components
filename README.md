@@ -73,7 +73,7 @@ Contributions are welcome! Please see `CONTRIBUTING.md` for our guidelines on co
 
 ## Authors
 
-- **Devansh Alok** - Initial work - [devanshalok](https://github.com/devanshalok)
+- **Devansh Alok** - [devanshalok](https://github.com/devanshalok)
 
 ## License
 
