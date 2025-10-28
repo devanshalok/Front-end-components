@@ -1,83 +1,94 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom/client";
+import React, { useEffect, useState } from "react";
 
-const AnalogClock = () => {
+export default function AnalogClock() {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    const interval = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(interval);
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
   }, []);
 
   const seconds = time.getSeconds();
-  const minutes = time.getMinutes() + seconds / 60;
-  const hours = time.getHours() % 12 + minutes / 60;
+  const minutes = time.getMinutes();
+  const hours = time.getHours();
 
-  const secondDeg = seconds * 6; // 360 / 60
-  const minuteDeg = minutes * 6;
-  const hourDeg = hours * 30; // 360 / 12
+  const secondDegrees = seconds * 6;
+  const minuteDegrees = minutes * 6 + seconds * 0.1;
+  const hourDegrees = hours * 30 + minutes * 0.5;
 
   const clockStyle = {
-    width: "250px",
-    height: "250px",
-    border: "8px solid #333",
-    borderRadius: "50%",
     position: "relative",
-    margin: "50px auto",
-    background: "#f0f0f0",
+    width: "300px",
+    height: "300px",
+    border: "8px solid #61dafb",
+    borderRadius: "50%",
+    background: "#fff",
+    boxShadow: "0 0 20px rgba(0,0,0,0.2)",
   };
 
-  // handWidth = width of the hand
-  // handLength = height/length of the hand
-  const handStyle = (handWidth, handLength, color, deg) => ({
+  const centerStyle = {
     position: "absolute",
     top: "50%",
     left: "50%",
-    width: `${handWidth}px`,
-    height: `${handLength}px`,
-    backgroundColor: color,
-    transformOrigin: "50% 100%", // bottom center of the hand
-    transform: `translate(-50%, -100%) rotate(${deg}deg)`,
-    borderRadius: "2px",
-    transition: "transform 0.5s ease-in-out",
-  });
+    width: "10px",
+    height: "10px",
+    background: "#333",
+    borderRadius: "50%",
+    transform: "translate(-50%, -50%)",
+    zIndex: 10,
+  };
+
+  const handBase = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transformOrigin: "bottom center",
+    transition: "transform 0.1s cubic-bezier(0.4, 2.3, 0.3, 1)",
+  };
+
+  const hourStyle = {
+    ...handBase,
+    width: "6px",
+    height: "90px",
+    backgroundColor: "#333",
+    transform: `translate(-50%, -100%) rotate(${hourDegrees}deg)`,
+    zIndex: 3,
+  };
+
+  const minuteStyle = {
+    ...handBase,
+    width: "4px",
+    height: "120px",
+    backgroundColor: "#007bff",
+    transform: `translate(-50%, -100%) rotate(${minuteDegrees}deg)`,
+    zIndex: 2,
+  };
+
+  const secondStyle = {
+    ...handBase,
+    width: "2px",
+    height: "130px",
+    backgroundColor: "#ff0000",
+    transform: `translate(-50%, -100%) rotate(${secondDegrees}deg)`,
+    zIndex: 1,
+  };
+
+  const containerStyle = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    backgroundColor: "#282c34",
+  };
 
   return (
-    <div
-      style={clockStyle}
-      aria-label={`Analog clock showing time ${time.toLocaleTimeString()}`}
-    >
-      {/* Hour hand */}
-      <div style={handStyle(6, 60, "#333", hourDeg)} />
-      {/* Minute hand */}
-      <div style={handStyle(4, 90, "#666", minuteDeg)} />
-      {/* Second hand */}
-      <div style={handStyle(2, 100, "red", secondDeg)} />
-      {/* Center circle */}
-      <div
-        style={{
-          position: "absolute",
-          width: "12px",
-          height: "12px",
-          backgroundColor: "#333",
-          borderRadius: "50%",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-      ></div>
+    <div style={containerStyle}>
+      <div style={clockStyle}>
+        <div style={centerStyle}></div>
+        <div style={hourStyle}></div>
+        <div style={minuteStyle}></div>
+        <div style={secondStyle}></div>
+      </div>
     </div>
   );
-};
-
-export default function App(){
-  return (
-    <div>
-      <h2 style={{ textAlign: "center" }}>React Analog Clock</h2>
-      <AnalogClock />
-    </div>
-  );
-};
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+}
