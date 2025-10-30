@@ -1,86 +1,110 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; 
+// Import React and two hooks: useState for state management, useEffect for running side effects like API calls
 
 export default function App() {
-  // State to store the list of birth years from API
+  // Define the main App component
+
   const [birthYears, setBirthYears] = useState([]);
+  // State to store the list of birth years fetched from the API
 
-  // State to store counts for each birth year
   const [counts, setCounts] = useState({});
+  // State to store a histogram: keys are years, values are number of people born in that year
 
-  // Loading and error states for API fetch
   const [loading, setLoading] = useState(true);
+  // State to indicate if the data is currently being fetched
+
   const [error, setError] = useState(false);
+  // State to indicate if there was an error during data fetching
 
   useEffect(() => {
-    // Async function to fetch 100 random users and get birth years
+    // useEffect runs after the component mounts
     const fetchData = async () => {
+      // Define an asynchronous function to fetch data
       try {
-        setLoading(true); // Set loading to true while fetching
-        setError(false);  // Reset error state
+        setLoading(true); // Set loading to true at the start
+        setError(false); // Reset error state
 
         const res = await fetch(
           "https://randomuser.me/api/?results=100&inc=dob"
-        ); // Fetch 100 users with only DOB included
-        const data = await res.json();
+        );
+        // Fetch 100 random users, only including date of birth (dob)
 
-        // Extract birth years from DOB
+        const data = await res.json();
+        // Parse the JSON response
+
         const years = data.results.map((user) =>
           new Date(user.dob.date).getFullYear()
         );
-        setBirthYears(years); // Save birth years in state
+        // Extract the birth year from each user's dob
 
-        // Compute histogram (counts per year)
+        setBirthYears(years);
+        // Update birthYears state with the array of years
+
         const histogram = {};
+        // Create an empty object to store counts of each year
+
         years.forEach((year) => {
           histogram[year] = (histogram[year] || 0) + 1;
         });
-        setCounts(histogram); // Save counts in state
+        // Count the occurrences of each year
+
+        setCounts(histogram);
+        // Update counts state with the histogram
       } catch (err) {
-        setError(true); // Set error state if API fails
-        console.error(err);
+        setError(true); // If any error occurs, set error state to true
+        console.error(err); // Log the error for debugging
       } finally {
-        setLoading(false); // Stop loading after fetch completes
+        setLoading(false); // Stop loading whether successful or error
       }
     };
 
-    fetchData(); // Call the async function once on mount
-  }, []); // Empty dependency array = run once on component mount
+    fetchData(); 
+    // Call the fetchData function when component mounts
+  }, []);
+  // Empty dependency array means this effect runs only once on mount
 
-  // Get sorted list of years for display
   const years = Object.keys(counts).sort((a, b) => a - b);
+  // Get all unique years from the histogram and sort them ascending
 
-  // Get maximum count to scale the bar heights proportionally
   const maxCount = Math.max(...Object.values(counts), 1);
+  // Find the highest count for scaling the histogram bars
+  // Default to 1 to avoid division by zero
 
-  // Render loading or error states
   if (loading) return <div style={styles.container}>Loading...</div>;
+  // Show loading text while fetching
+
   if (error) return <div style={styles.container}>Failed to fetch data.</div>;
+  // Show error message if fetch failed
 
   return (
     <div style={styles.container}>
       <h2>Birth Year Histogram</h2>
 
-      {/* Histogram container */}
-      <div style={styles.histogram}>
-        {years.map((year) => (
-          <div key={year} style={styles.barContainer}>
-            {/* Each bar's height is proportional to count */}
-            <div
-              style={{
-                ...styles.bar,
-                height: `${(counts[year] / maxCount) * 150}px`,
-              }}
-              title={`${year}: ${counts[year]}`} // Tooltip shows count
-            ></div>
-            <span style={styles.label}>{year}</span>
-          </div>
-        ))}
+      {/* Make histogram horizontally scrollable */}
+      <div style={styles.scrollContainer}>
+        <div style={styles.histogram}>
+          {years.map((year) => (
+            <div key={year} style={styles.barContainer}>
+              <div
+                style={{
+                  ...styles.bar,
+                  height: `${(counts[year] / maxCount) * 150}px`,
+                  // Scale bar height relative to maxCount
+                }}
+                title={`${year}: ${counts[year]}`}
+                // Show tooltip with year and count
+              ></div>
+              <span style={styles.label}>{year}</span>
+              {/* Display year below each bar */}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
-// CSS-in-JS styles
+// Inline styles object for styling the components
 const styles = {
   container: {
     fontFamily: "sans-serif",
@@ -88,28 +112,31 @@ const styles = {
     margin: "40px auto",
     textAlign: "center",
   },
+  scrollContainer: {
+    overflowX: "auto", // Enable horizontal scroll if histogram is wide
+    paddingBottom: "10px", // Space for scrollbar
+  },
   histogram: {
     display: "flex",
-    alignItems: "flex-end", // Bars grow from bottom
-    justifyContent: "center",
+    alignItems: "flex-end",
     gap: "6px",
-    marginTop: "20px",
     minHeight: "160px",
-    borderBottom: "1px solid #333", // X-axis line
+    borderBottom: "1px solid #333",
     paddingBottom: "10px",
   },
   barContainer: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    flex: "0 0 auto", // Prevent shrinking of bars
   },
   bar: {
     width: "20px",
-    backgroundColor: "#1976d2", // Blue bars
-    borderRadius: "4px 4px 0 0", // Rounded top corners
+    backgroundColor: "#1976d2",
+    borderRadius: "4px 4px 0 0",
   },
   label: {
     marginTop: "4px",
-    fontSize: "12px", // Year label under each bar
+    fontSize: "12px",
   },
 };
