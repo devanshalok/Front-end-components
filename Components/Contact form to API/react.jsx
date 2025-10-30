@@ -1,35 +1,45 @@
 import React, { useState } from "react";
 
+// Main App component rendering a contact form
 export default function App() {
+  // State to hold form input values
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [status, setStatus] = useState("idle"); // idle | loading | success | error
 
+  // State to track submission status: idle, loading, success, error
+  const [status, setStatus] = useState("idle"); 
+
+  // Updates form state when any input changes
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Handles form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent page reload
 
+    // Basic validation to ensure all fields are filled
     if (!form.name || !form.email || !form.message) {
       alert("Please fill out all fields");
       return;
     }
 
     try {
-      setStatus("loading");
+      setStatus("loading"); // Show loading state
+
+      // Send POST request to API endpoint with form data
       const res = await fetch("https://example.com/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
-      if (!res.ok) throw new Error("Failed to send");
+      if (!res.ok) throw new Error("Failed to send"); // Handle server errors
 
+      // On success, update status and reset form fields
       setStatus("success");
       setForm({ name: "", email: "", message: "" });
     } catch (err) {
-      setStatus("error");
+      setStatus("error"); // Show error message if request fails
     }
   };
 
@@ -44,8 +54,9 @@ export default function App() {
         background: "#f9f9f9",
       }}
     >
+      {/* Contact form container */}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit} // Attach submit handler
         style={{
           background: "white",
           padding: "20px",
@@ -59,6 +70,7 @@ export default function App() {
       >
         <h3 style={{ textAlign: "center", marginBottom: "10px" }}>Contact Us</h3>
 
+        {/* Name input */}
         <input
           type="text"
           name="name"
@@ -72,6 +84,7 @@ export default function App() {
           }}
         />
 
+        {/* Email input */}
         <input
           type="email"
           name="email"
@@ -85,6 +98,7 @@ export default function App() {
           }}
         />
 
+        {/* Message textarea */}
         <textarea
           name="message"
           placeholder="Your Message"
@@ -95,13 +109,14 @@ export default function App() {
             padding: "8px",
             borderRadius: "4px",
             border: "1px solid #ccc",
-            resize: "none",
+            resize: "none", // Prevent resizing
           }}
         />
 
+        {/* Submit button */}
         <button
           type="submit"
-          disabled={status === "loading"}
+          disabled={status === "loading"} // Disable while sending
           style={{
             padding: "8px",
             border: "none",
@@ -114,11 +129,14 @@ export default function App() {
           {status === "loading" ? "Sending..." : "Send"}
         </button>
 
+        {/* Success message */}
         {status === "success" && (
           <p style={{ color: "green", textAlign: "center" }}>
             Message sent successfully!
           </p>
         )}
+
+        {/* Error message */}
         {status === "error" && (
           <p style={{ color: "red", textAlign: "center" }}>
             Failed to send message.
