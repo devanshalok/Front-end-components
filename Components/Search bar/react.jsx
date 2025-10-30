@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 
 const SearchBar = () => {
+  // State to store the current search query
   const [query, setQuery] = useState("");
+
+  // Sample list of items to search from
   const items = [
     "Apple",
     "Banana",
@@ -16,20 +19,23 @@ const SearchBar = () => {
     "Cherry",
   ];
 
+  // Filter items based on query (case-insensitive)
   const filteredItems = items.filter((item) =>
     item.toLowerCase().includes(query.toLowerCase())
   );
 
   return (
     <div style={styles.container}>
+      {/* Search input field */}
       <input
         type="text"
         placeholder="Search items..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        value={query} // Controlled input
+        onChange={(e) => setQuery(e.target.value)} // Update query on typing
         style={styles.input}
       />
 
+      {/* Show filtered items or "No results found" */}
       {filteredItems.length > 0 ? (
         <ul style={styles.list}>
           {filteredItems.map((item, index) => (
@@ -45,6 +51,7 @@ const SearchBar = () => {
   );
 };
 
+// Inline styles
 const styles = {
   container: {
     fontFamily: "sans-serif",
@@ -66,7 +73,7 @@ const styles = {
     padding: "6px 8px",
     border: "1px solid #ddd",
     marginTop: 4,
-    cursor: "pointer",
+    cursor: "pointer", // Indicates the items can be clicked
   },
   noResults: {
     color: "#888",
