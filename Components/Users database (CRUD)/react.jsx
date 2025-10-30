@@ -1,37 +1,52 @@
 import React, { useState } from "react";
 
 const UserDatabase = () => {
+  // State to store all users
   const [users, setUsers] = useState([]);
+
+  // State to filter users by name
   const [filter, setFilter] = useState("");
+
+  // States for input fields to add a new user
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+
+  // State for the user being edited
   const [editUser, setEditUser] = useState(null);
+
+  // Simple ID generator for new users
   const [idCounter, setIdCounter] = useState(1);
 
+  // Add a new user to the database
   const addUser = () => {
     if (!name || !email) {
-      alert("Please enter both name and email.");
+      alert("Please enter both name and email."); // Validation
       return;
     }
+    // Add user and increment ID counter
     setUsers([...users, { id: idCounter, name, email }]);
     setIdCounter(idCounter + 1);
+    // Clear input fields
     setName("");
     setEmail("");
   };
 
+  // Delete a user by ID
   const deleteUser = (id) => {
     setUsers(users.filter((user) => user.id !== id));
   };
 
+  // Update the currently edited user
   const updateUser = () => {
     setUsers(
       users.map((u) =>
         u.id === editUser.id ? { ...u, name: editUser.name, email: editUser.email } : u
       )
     );
-    setEditUser(null);
+    setEditUser(null); // Close the edit modal
   };
 
+  // Filter users based on the filter input
   const filteredUsers = users.filter((u) =>
     u.name.toLowerCase().includes(filter.toLowerCase())
   );
@@ -48,6 +63,7 @@ const UserDatabase = () => {
     >
       <h1>User Database</h1>
 
+      {/* Filter input */}
       <input
         type="text"
         placeholder="Filter by name..."
@@ -63,6 +79,7 @@ const UserDatabase = () => {
         }}
       />
 
+      {/* Form to add a new user */}
       <div style={{ margin: "10px 0" }}>
         <div style={{ marginBottom: "10px" }}>
           <label style={{ display: "inline-block", width: "80px" }}>Name</label>
@@ -100,6 +117,7 @@ const UserDatabase = () => {
         </button>
       </div>
 
+      {/* User table */}
       <table
         style={{
           margin: "20px auto",
@@ -111,6 +129,7 @@ const UserDatabase = () => {
       >
         <thead>
           <tr>
+            {/* Table headers */}
             <th style={{ border: "1px solid #ddd", padding: "10px", background: "#007bff", color: "white" }}>ID</th>
             <th style={{ border: "1px solid #ddd", padding: "10px", background: "#007bff", color: "white" }}>Name</th>
             <th style={{ border: "1px solid #ddd", padding: "10px", background: "#007bff", color: "white" }}>Email</th>
@@ -118,6 +137,7 @@ const UserDatabase = () => {
           </tr>
         </thead>
         <tbody>
+          {/* Display filtered users */}
           {filteredUsers.map((u) => (
             <tr key={u.id}>
               <td style={{ border: "1px solid #ddd", padding: "10px" }}>{u.id}</td>
@@ -132,6 +152,7 @@ const UserDatabase = () => {
                   justifyContent: "center",
                 }}
               >
+                {/* Edit button */}
                 <button
                   onClick={() => setEditUser(u)}
                   style={{
@@ -145,6 +166,7 @@ const UserDatabase = () => {
                 >
                   Edit
                 </button>
+                {/* Delete button */}
                 <button
                   onClick={() => deleteUser(u.id)}
                   style={{
@@ -164,6 +186,7 @@ const UserDatabase = () => {
         </tbody>
       </table>
 
+      {/* Edit user modal */}
       {editUser && (
         <div
           style={{
@@ -183,6 +206,7 @@ const UserDatabase = () => {
               width: "300px",
             }}
           >
+            {/* Modal header with close button */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <h2 style={{ margin: 0 }}>Edit User</h2>
               <span
@@ -192,6 +216,8 @@ const UserDatabase = () => {
                 ×
               </span>
             </div>
+
+            {/* Edit name */}
             <div style={{ marginTop: "10px" }}>
               <label>Name</label>
               <input
@@ -201,6 +227,8 @@ const UserDatabase = () => {
                 style={{ width: "100%", padding: "5px", marginTop: "5px" }}
               />
             </div>
+
+            {/* Edit email */}
             <div style={{ marginTop: "10px" }}>
               <label>Email</label>
               <input
@@ -210,6 +238,8 @@ const UserDatabase = () => {
                 style={{ width: "100%", padding: "5px", marginTop: "5px" }}
               />
             </div>
+
+            {/* Update button */}
             <div style={{ textAlign: "right", marginTop: "15px" }}>
               <button
                 onClick={updateUser}
