@@ -4,8 +4,10 @@ export default function SignupForm() {
   const [formData, setFormData] = useState({ username: "", email: "", password: "" });
   const [errors, setErrors] = useState({});
 
+  // Update state on input change
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  // Validate form fields
   const validate = () => {
     const newErrors = {};
     if (!formData.username.trim()) newErrors.username = "Please enter a username.";
@@ -16,10 +18,13 @@ export default function SignupForm() {
     return newErrors;
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = validate();
     setErrors(newErrors);
+
+    // If no errors, show success and reset form
     if (Object.keys(newErrors).length === 0) {
       alert("Signup successful!");
       setFormData({ username: "", email: "", password: "" });
@@ -31,6 +36,7 @@ export default function SignupForm() {
       <div style={styles.formBox}>
         <h2 style={{ textAlign: "center" }}>Sign Up</h2>
         <form onSubmit={handleSubmit}>
+          {/* Username Field */}
           <div style={styles.field}>
             <label>Username</label>
             <input
@@ -43,6 +49,7 @@ export default function SignupForm() {
             {errors.username && <div style={styles.error}>{errors.username}</div>}
           </div>
 
+          {/* Email Field */}
           <div style={styles.field}>
             <label>Email</label>
             <input
@@ -55,6 +62,7 @@ export default function SignupForm() {
             {errors.email && <div style={styles.error}>{errors.email}</div>}
           </div>
 
+          {/* Password Field */}
           <div style={styles.field}>
             <label>Password</label>
             <input
