@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 const DataTable = () => {
+  // Initial static data for the table
   const initialData = [
     { name: "John Doe", age: 28, city: "New York" },
     { name: "Anna Smith", age: 22, city: "London" },
@@ -9,21 +10,28 @@ const DataTable = () => {
     { name: "Michael Brown", age: 42, city: "Chicago" },
   ];
 
+  // State to hold the table data (sortable and filterable)
   const [data, setData] = useState(initialData);
+  // State for search input
   const [searchTerm, setSearchTerm] = useState("");
+  // State for current sort configuration: which column and direction
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
+  // Function to sort table based on column key and direction
   const handleSort = (key, direction) => {
+    // Clone and sort the data
     const sortedData = [...data].sort((a, b) => {
       if (a[key] < b[key]) return direction === "asc" ? -1 : 1;
       if (a[key] > b[key]) return direction === "asc" ? 1 : -1;
       return 0;
     });
 
+    // Update sort config state and the sorted data
     setSortConfig({ key, direction });
     setData(sortedData);
   };
 
+  // Filter the data based on search input (case-insensitive)
   const filteredData = data.filter(
     (item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -33,6 +41,7 @@ const DataTable = () => {
 
   return (
     <div style={styles.container}>
+      {/* Search input */}
       <input
         type="text"
         placeholder="Search..."
@@ -41,13 +50,17 @@ const DataTable = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
 
+      {/* Table */}
       <table style={styles.table}>
         <thead>
           <tr>
+            {/* Render headers dynamically */}
             {["name", "age", "city"].map((key) => (
               <th key={key} style={styles.th}>
                 <div style={styles.headerWrapper}>
                   <span style={{ textTransform: "capitalize" }}>{key}</span>
+
+                  {/* Sorting arrows */}
                   <div style={styles.arrows}>
                     <span
                       style={{
@@ -55,7 +68,7 @@ const DataTable = () => {
                         color:
                           sortConfig.key === key && sortConfig.direction === "asc"
                             ? "black"
-                            : "#bbb",
+                            : "#bbb", // Active arrow is black, inactive is gray
                       }}
                       onClick={() => handleSort(key, "asc")}
                     >
@@ -81,6 +94,7 @@ const DataTable = () => {
         </thead>
 
         <tbody>
+          {/* Render filtered data or fallback "No results" */}
           {filteredData.length > 0 ? (
             filteredData.map((item, index) => (
               <tr key={index} style={styles.tr}>
@@ -102,6 +116,7 @@ const DataTable = () => {
   );
 };
 
+// Inline styling
 const styles = {
   container: {
     fontFamily: "sans-serif",
@@ -127,7 +142,7 @@ const styles = {
     border: "1px solid #ddd",
   },
   tr: {
-    transition: "background 0.2s",
+    transition: "background 0.2s", // Smooth hover effect if added
   },
   noData: {
     textAlign: "center",
