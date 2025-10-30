@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
+// Main App component rendering the email chips input
 export default function App() {
+  // Sample suggestions for autocomplete
   const suggestions = [
     "alice@example.com",
     "bob@example.com",
@@ -9,19 +11,25 @@ export default function App() {
     "eve@example.com",
   ];
 
+  // State to store the input text
   const [input, setInput] = useState("");
+
+  // State to store the selected chips (emails)
   const [chips, setChips] = useState([]);
 
+  // Filter suggestions based on input and exclude already selected chips
   const filteredSuggestions = suggestions.filter(
     (s) =>
       s.toLowerCase().includes(input.toLowerCase()) && !chips.includes(s)
   );
 
+  // Add a chip when user selects a suggestion or presses enter
   const handleAddChip = (email) => {
-    if (!chips.includes(email)) setChips([...chips, email]);
-    setInput("");
+    if (!chips.includes(email)) setChips([...chips, email]); // Prevent duplicates
+    setInput(""); // Clear input after adding
   };
 
+  // Remove a chip when user clicks the × button
   const handleRemoveChip = (email) => {
     setChips(chips.filter((c) => c !== email));
   };
@@ -29,32 +37,39 @@ export default function App() {
   return (
     <div style={styles.container}>
       <h2>Email Chips</h2>
+
+      {/* Container holding chips and input field */}
       <div style={styles.chipContainer}>
+        {/* Render selected chips */}
         {chips.map((chip) => (
           <div key={chip} style={styles.chip}>
             {chip}{" "}
             <span
               style={{ marginLeft: 6, cursor: "pointer" }}
-              onClick={() => handleRemoveChip(chip)}
+              onClick={() => handleRemoveChip(chip)} // Remove chip on click
             >
               ×
             </span>
           </div>
         ))}
+
+        {/* Input field for typing emails */}
         <input
           type="text"
           placeholder="Type email..."
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => setInput(e.target.value)} // Update input state
           style={styles.input}
         />
       </div>
+
+      {/* Render dropdown suggestions when user types */}
       {input && filteredSuggestions.length > 0 && (
         <div style={styles.dropdown}>
           {filteredSuggestions.map((s) => (
             <div
               key={s}
-              onClick={() => handleAddChip(s)}
+              onClick={() => handleAddChip(s)} // Add chip on click
               style={styles.suggestion}
             >
               {s}
@@ -66,6 +81,7 @@ export default function App() {
   );
 }
 
+// Inline styles for layout and appearance
 const styles = {
   container: {
     fontFamily: "sans-serif",
@@ -74,7 +90,7 @@ const styles = {
   },
   chipContainer: {
     display: "flex",
-    flexWrap: "wrap",
+    flexWrap: "wrap", // Allow chips to wrap to next line
     gap: "6px",
     padding: "6px",
     border: "1px solid #ccc",
@@ -92,7 +108,7 @@ const styles = {
   },
   input: {
     border: "none",
-    flex: 1,
+    flex: 1, // Take remaining space
     minWidth: "120px",
     outline: "none",
     fontSize: "14px",
@@ -102,10 +118,10 @@ const styles = {
     borderRadius: "4px",
     marginTop: "4px",
     maxHeight: "120px",
-    overflowY: "auto",
+    overflowY: "auto", // Scroll if many suggestions
   },
   suggestion: {
     padding: "6px 10px",
-    cursor: "pointer",
+    cursor: "pointer", // Indicate clickable items
   },
 };
