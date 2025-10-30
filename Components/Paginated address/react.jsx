@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 const PaginatedAddressList = () => {
+  // Hardcoded list of addresses to display
   const addresses = [
     '123 Main St, New York, NY 10001',
     '456 Elm St, Los Angeles, CA 90001',
@@ -19,16 +20,22 @@ const PaginatedAddressList = () => {
     '1212 Cypress St, Charlotte, NC 28201'
   ];
 
-  const addressesPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(1);
+  const addressesPerPage = 5; // Number of addresses to display per page
+  const [currentPage, setCurrentPage] = useState(1); // State for current page number
 
+  // Total number of pages based on addresses length and addresses per page
   const totalPages = Math.ceil(addresses.length / addressesPerPage);
+  
+  // Calculate starting index for slicing addresses based on current page
   const startIndex = (currentPage - 1) * addressesPerPage;
+  // Slice the addresses array to get only the addresses for the current page
   const currentAddresses = addresses.slice(startIndex, startIndex + addressesPerPage);
 
   return (
     <div style={{ fontFamily: "Arial, sans-serif", margin: 20 }}>
       <h2>Shipping Addresses</h2>
+
+      {/* Table to display addresses */}
       <table
         style={{
           maxWidth: 600,
@@ -39,13 +46,16 @@ const PaginatedAddressList = () => {
       >
         <thead>
           <tr>
+            {/* Table headers */}
             <th style={{ border: "1px solid #ddd", padding: 8, textAlign: "left", backgroundColor: "#f4f4f4" }}>No.</th>
             <th style={{ border: "1px solid #ddd", padding: 8, textAlign: "left", backgroundColor: "#f4f4f4" }}>Address</th>
           </tr>
         </thead>
         <tbody>
+          {/* Render only the addresses for the current page */}
           {currentAddresses.map((address, index) => (
             <tr key={startIndex + index}>
+              {/* Display sequential number based on current page */}
               <td style={{ border: "1px solid #ddd", padding: 8 }}>{startIndex + index + 1}</td>
               <td style={{ border: "1px solid #ddd", padding: 8 }}>{address}</td>
             </tr>
@@ -53,10 +63,11 @@ const PaginatedAddressList = () => {
         </tbody>
       </table>
 
+      {/* Pagination buttons */}
       <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
         <button
-          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))} // Go to previous page
+          disabled={currentPage === 1} // Disable button if on first page
           style={{
             padding: "8px 12px",
             margin: "0 5px",
@@ -68,9 +79,10 @@ const PaginatedAddressList = () => {
         >
           Previous
         </button>
+
         <button
-          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))} // Go to next page
+          disabled={currentPage === totalPages} // Disable button if on last page
           style={{
             padding: "8px 12px",
             margin: "0 5px",
